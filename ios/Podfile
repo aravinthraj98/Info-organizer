@@ -12,6 +12,12 @@ target 'InfoOrg' do
     :hermes_enabled => false
   )
 
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+  pod 'RNTextGradientView', :path => '../node_modules/react-native-text-gradient'
+
   target 'InfoOrgTests' do
     inherit! :complete
     # Pods for testing
