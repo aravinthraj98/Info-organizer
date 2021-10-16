@@ -7,12 +7,12 @@ import {Primary, Secondary} from '../Utils/Colors';
 function Home() {
   return (
     <View style={{flex: 1, backgroundColor: Secondary}}>
-      <View style={{flex: 10, backgroundColor: Secondary}}>
+      <View style={{flex: 10, backgroundColor: 'whitesmoke'}}>
         <HomePanel />
       </View>
-      <View style={{flex: 1, width: '100%'}}>
+      {/* <View style={{flex: 1, width: '100%'}}>
         <Header />
-      </View>
+      </View> */}
     </View>
   );
 }

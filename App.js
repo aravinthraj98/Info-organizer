@@ -42,7 +42,7 @@ const App = () => {
     //   <View style={{flex:1,backgroundColor:Primary}}>
     // <Text>Hello</Text>
     //   </View>
-    <Home />
+    <MainScreen />
   );
 };
 
