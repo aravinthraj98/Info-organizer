@@ -27,39 +27,11 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import MainScreen from './src/Navigation/MainScreen';
+import Home from './src/Screens/Home';
 import Login from './src/Screens/Login';
-import { Primary } from './src/Utils/Colors';
+import {Primary} from './src/Utils/Colors';
 
-
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-           
-            // fontFamily:PrimaryFont
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
-
-const App= () => {
+const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -67,11 +39,10 @@ const App= () => {
   };
 
   return (
-  //   <View style={{flex:1,backgroundColor:Primary}}>
-  // <Text>Hello</Text>
-  //   </View>
-  
-<MainScreen />
+    //   <View style={{flex:1,backgroundColor:Primary}}>
+    // <Text>Hello</Text>
+    //   </View>
+    <Home />
   );
 };
 
