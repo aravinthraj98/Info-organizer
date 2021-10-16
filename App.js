@@ -26,6 +26,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import MainScreen from './src/Navigation/MainScreen';
 import Login from './src/Screens/Login';
 import { Primary } from './src/Utils/Colors';
 
@@ -70,7 +71,7 @@ const App= () => {
   // <Text>Hello</Text>
   //   </View>
   
-   <Login />
+<MainScreen />
   );
 };
 
