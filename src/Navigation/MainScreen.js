@@ -4,6 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import Login from '../Screens/Login';
 import SubScreen from './SubScreen';
+import InformationScreen from '../Screens/InformationScreen';
 
 const Stack = createNativeStackNavigator();
 function MainScreen() {
@@ -17,6 +18,7 @@ function MainScreen() {
           </Stack.Screen>
         )}
         <Stack.Screen name="Homes" component={SubScreen} />
+        <Stack.Screen name="Information" component={InformationScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

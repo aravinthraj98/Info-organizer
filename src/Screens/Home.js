@@ -4,11 +4,17 @@ import Header from '../Components/Header';
 import HomePanel from '../Components/HomePanel';
 import {Primary, Secondary} from '../Utils/Colors';
 
-function Home() {
+function Home({navigation}) {
+  const InfoPanel = name => {
+    console.log('name' + name);
+    navigation.push('Information', {
+      name,
+    });
+  };
   return (
     <View style={{flex: 1, backgroundColor: Secondary}}>
       <View style={{flex: 10, backgroundColor: 'whitesmoke'}}>
-        <HomePanel />
+        <HomePanel InfoPanel={InfoPanel} />
       </View>
       {/* <View style={{flex: 1, width: '100%'}}>
         <Header />

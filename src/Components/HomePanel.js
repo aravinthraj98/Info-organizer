@@ -1,8 +1,8 @@
 import React from 'react';
-import {ScrollView, Text, View} from 'react-native';
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {Primary, Secondary} from '../Utils/Colors';
 import {Avatar, Badge} from 'react-native-elements';
-function HomePanel() {
+function HomePanel({InfoPanel}) {
   const detail = [
     {projectName: 'hello', projectDeadLine: 'today', newInfo: true},
     {projectName: 'hello1', projectDeadLine: 'today', newInfo: false},
@@ -14,7 +14,8 @@ function HomePanel() {
     <View style={{flex: 1, padding: 10}}>
       <ScrollView>
         {detail.map((value, index) => (
-          <View
+          <TouchableOpacity
+            onPress={()=>InfoPanel(value.projectName)}
             key={index}
             style={{
               flex: 1,
@@ -81,7 +82,7 @@ function HomePanel() {
                 </Text>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
       </ScrollView>
     </View>

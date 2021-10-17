@@ -6,7 +6,7 @@ import {Primary, Secondary} from '../Utils/Colors';
 import {Icon} from 'react-native-elements/dist/icons/Icon';
 
 const Tab = createMaterialBottomTabNavigator();
-function SubScreen() {
+function SubScreen({navigation}) {
   return (
     <Tab.Navigator
       activeColor={Primary}
@@ -19,7 +19,7 @@ function SubScreen() {
       <Tab.Screen
         options={{tabBarIcon: ({color}) => <Icon name="home" color={color} />}}
         name="home"
-        component={Home}
+        component={()=><Home navigation={navigation} />}
       />
       <Tab.Screen name="homePa" component={Home} />
     </Tab.Navigator>
