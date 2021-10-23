@@ -1,7 +1,9 @@
 import React from 'react';
-import {firebase, db} from '../Database/firebase';
-// const db =firebase.firestore();
-
+// import {firebase, db} from '../Database/firebase';
+import {firebase} from '@react-native-firebase/firestore';
+import firestore from '@react-native-firebase/firestore';
+firebase.app();
+const db = firestore();
 async function addNewCompany(
   companyName,
   companyEmail,
