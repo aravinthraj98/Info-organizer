@@ -8,7 +8,7 @@ import InformationScreen from '../Screens/InformationScreen';
 
 const Stack = createNativeStackNavigator();
 function MainScreen() {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>

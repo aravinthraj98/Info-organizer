@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {ScrollView} from 'react-native';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {Card, Input, FAB} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Primary, Secondary} from '../Utils/Colors';
 function SignUp({setSignUp}) {
+  const initialState ={
+    companyName:"",
+    companyEmail:"",
+    password:"",
+    confirmPassword:"",
+    companyDescription:"",
+
+  }
+  const [companyDetails,setCompanyDetails] = useState(initialState);
+  function handleChange(name,event) {
+    
+  }
   return (
     <View style={{flex: 1}}>
       <Card>
@@ -17,9 +29,10 @@ function SignUp({setSignUp}) {
               fontWeight: '400',
             }}>
             Sign
-            <Text style={{color: Primary, fontWeight: '900'}}>UP</Text>
+            <Text style={{color: Primary, fontWeight: '900'}}></Text>
           </Text>
           <Input
+            onChangeText={text => handleChange('companyName', text)}
             placeholder="Company Name"
             errorStyle={{color: 'red'}}
             errorMessage="ENTER A VALID ERROR HERE"
@@ -27,12 +40,14 @@ function SignUp({setSignUp}) {
           />
 
           <Input
+            onChangeText={text => handleChange('companyEmail', text)}
             placeholder="Company Email"
             errorStyle={{color: 'red'}}
             errorMessage="ENTER A VALID ERROR HERE"
             leftIcon={<Icon name="user" size={24} color={Primary} />}
           />
           <Input
+            onChangeText={text => handleChange('password', text)}
             placeholder="Password"
             errorStyle={{color: 'red'}}
             errorMessage="ENTER A VALID ERROR HERE"
@@ -40,6 +55,7 @@ function SignUp({setSignUp}) {
             leftIcon={<Icon name="lock" size={24} color={Secondary} />}
           />
           <Input
+            onChangeText={text => handleChange('confirmPassword', text)}
             placeholder="Confirm Password"
             errorStyle={{color: 'red'}}
             errorMessage="ENTER A VALID ERROR HERE"
@@ -47,6 +63,7 @@ function SignUp({setSignUp}) {
             leftIcon={<Icon name="lock" size={24} color={Secondary} />}
           />
           <Input
+            onChangeText={text => handleChange('companyDescription', text)}
             multiline={true}
             numberOfLines={5}
             placeholder="company Description"
@@ -58,7 +75,7 @@ function SignUp({setSignUp}) {
           <TouchableOpacity
             style={{
               backgroundColor: Primary,
-              width: '70%',
+              width: '80%',
               marginLeft: '15%',
               borderRadius: 20,
               height: 30,
