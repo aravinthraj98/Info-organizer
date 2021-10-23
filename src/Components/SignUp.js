@@ -1,21 +1,35 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {ScrollView} from 'react-native';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {Card, Input, FAB} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {addNewCompany} from '../Services/CrudFirestore';
 import {Primary, Secondary} from '../Utils/Colors';
 function SignUp({setSignUp}) {
-  const initialState ={
-    companyName:"",
-    companyEmail:"",
-    password:"",
-    confirmPassword:"",
-    companyDescription:"",
-
+  const initialState = {
+    companyName: '',
+    companyEmail: '',
+    password: '',
+    confirmPassword: '',
+    companyDescription: '',
+  };
+  const [companyDetails, setCompanyDetails] = useState(initialState);
+  function handleChange(name, event) {
+    setCompanyDetails({...companyDetails, [name]: event});
   }
-  const [companyDetails,setCompanyDetails] = useState(initialState);
-  function handleChange(name,event) {
-    
+  async function handleSubmit() {
+    if (companyDetails.password != companyDetails.confirmPassword) {
+      alert('Password  misMatch');
+      return;
+    }
+    await addNewCompany(
+      companyDetails.companyName,
+      companyDetails.companyEmail,
+      companyDetails.password,
+      companyDetails.companyDescription,
+    );
+    console.log('Company added successfully');
+    // console.log(companyDetails);
   }
   return (
     <View style={{flex: 1}}>
@@ -35,7 +49,8 @@ function SignUp({setSignUp}) {
             onChangeText={text => handleChange('companyName', text)}
             placeholder="Company Name"
             errorStyle={{color: 'red'}}
-            errorMessage="ENTER A VALID ERROR HERE"
+            errorMessage=""
+            value={companyDetails.companyName}
             leftIcon={<Icon name="user" size={24} color={Primary} />}
           />
 
@@ -43,23 +58,26 @@ function SignUp({setSignUp}) {
             onChangeText={text => handleChange('companyEmail', text)}
             placeholder="Company Email"
             errorStyle={{color: 'red'}}
-            errorMessage="ENTER A VALID ERROR HERE"
+            errorMessage=""
+            value={companyDetails.companyEmail}
             leftIcon={<Icon name="user" size={24} color={Primary} />}
           />
           <Input
             onChangeText={text => handleChange('password', text)}
             placeholder="Password"
             errorStyle={{color: 'red'}}
-            errorMessage="ENTER A VALID ERROR HERE"
+            errorMessage=""
             secureTextEntry={true}
+            value={companyDetails.password}
             leftIcon={<Icon name="lock" size={24} color={Secondary} />}
           />
           <Input
             onChangeText={text => handleChange('confirmPassword', text)}
             placeholder="Confirm Password"
             errorStyle={{color: 'red'}}
-            errorMessage="ENTER A VALID ERROR HERE"
+            errorMessage=""
             secureTextEntry={true}
+            value={companyDetails.confirmPassword}
             leftIcon={<Icon name="lock" size={24} color={Secondary} />}
           />
           <Input
@@ -68,11 +86,12 @@ function SignUp({setSignUp}) {
             numberOfLines={5}
             placeholder="company Description"
             errorStyle={{color: 'red'}}
-            errorMessage="ENTER A VALID ERROR HERE"
-            secureTextEntry={true}
+            errorMessage=""
+            value={companyDetails.companyDescription}
             leftIcon={<Icon name="lock" size={24} color={Secondary} />}
           />
           <TouchableOpacity
+            onPress={handleSubmit}
             style={{
               backgroundColor: Primary,
               width: '80%',
