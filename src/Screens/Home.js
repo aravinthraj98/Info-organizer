@@ -11,10 +11,13 @@ function Home({navigation}) {
       name,
     });
   };
+  function handleNavigate(){
+     navigation.push("createLeadAndProject")
+  }
   return (
     <View style={{flex: 1, backgroundColor: Secondary}}>
       <View style={{flex: 10, backgroundColor: 'whitesmoke'}}>
-        <HomePanel InfoPanel={InfoPanel} />
+        <HomePanel InfoPanel={InfoPanel} handleNavigate={handleNavigate} />
       </View>
       {/* <View style={{flex: 1, width: '100%'}}>
         <Header />

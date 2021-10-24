@@ -1,21 +1,23 @@
 import React from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {Primary, Secondary} from '../Utils/Colors';
-import {Avatar, Badge} from 'react-native-elements';
-function HomePanel({InfoPanel}) {
+import {Avatar, Badge, FAB} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
+function HomePanel({InfoPanel,handleNavigate}) {
   const detail = [
     {projectName: 'hello', projectDeadLine: 'today', newInfo: true},
     {projectName: 'hello1', projectDeadLine: 'today', newInfo: false},
     {projectName: 'hello12', projectDeadLine: 'today', newInfo: true},
     {projectName: 'hello23', projectDeadLine: 'today', newInfo: false},
   ];
+ 
 
   return (
     <View style={{flex: 1, padding: 10}}>
       <ScrollView>
         {detail.map((value, index) => (
           <TouchableOpacity
-            onPress={()=>InfoPanel(value.projectName)}
+            onPress={() => InfoPanel(value.projectName)}
             key={index}
             style={{
               flex: 1,
@@ -40,7 +42,7 @@ function HomePanel({InfoPanel}) {
               {value.newInfo && (
                 <Badge
                   status="warning"
-                  badgeStyle={{width: 12, height: 12}}
+                  // badgeStyle={{width: 12, height: 12}}
                   containerStyle={{
                     position: 'absolute',
                     top: 2,
@@ -85,6 +87,13 @@ function HomePanel({InfoPanel}) {
           </TouchableOpacity>
         ))}
       </ScrollView>
+      <FAB
+        // onPress={() => setSignUp(true)}
+        onPress={handleNavigate}
+        style={{justifyContent: 'flex-end'}}
+        color={Primary}
+        title={<Icon size={20} color={Secondary} name="plus" />}
+      />
     </View>
   );
 }

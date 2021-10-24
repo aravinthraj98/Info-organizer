@@ -8,7 +8,7 @@ function InformationScreen({route, navigation}) {
   return (
     <View style={{flex: 1}}>
       <View style={{flex: 1}}>
-        <Header title={projectName} navigation={navigation7} />
+        <Header title={projectName} navigation={navigation} />
       </View>
       <View style={{flex: 9}}>
         <InformationPanel />

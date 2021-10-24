@@ -5,7 +5,7 @@ import {Card, Input, Icon} from 'react-native-elements';
 import {Primary, Secondary} from '../Utils/Colors';
 function AddMember() {
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, justifyContent: 'center'}}>
       <Card>
         <View style={{padding: 10}}>
           <Text
