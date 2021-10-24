@@ -22,12 +22,26 @@ function SignUp({setSignUp}) {
       alert('Password  misMatch');
       return;
     }
-    await addNewCompany(
+    if (
+      companyDetails.companyName.trim().length === 0 ||
+      companyDetails.companyEmail.split('@').length < 2 ||
+      companyDetails.companyDescription.length === 0
+    ) {
+      alert('come fields are invalid');
+      return;
+    }
+    let res = await addNewCompany(
       companyDetails.companyName,
       companyDetails.companyEmail,
       companyDetails.password,
       companyDetails.companyDescription,
     );
+    if (res === true) {
+      alert('company added successfully');
+      setCompanyDetails({...initialState});
+    } else {
+      alert('res');
+    }
     console.log('Company added successfully');
     // console.log(companyDetails);
   }

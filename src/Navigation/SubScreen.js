@@ -4,6 +4,7 @@ import {createMaterialBottomTabNavigator} from '@react-navigation/material-botto
 import Home from '../Screens/Home';
 import {Primary, Secondary} from '../Utils/Colors';
 import {Icon} from 'react-native-elements/dist/icons/Icon';
+import AddMember from '../Components/AddMembers';
 
 const Tab = createMaterialBottomTabNavigator();
 function SubScreen({navigation}) {
@@ -21,7 +22,7 @@ function SubScreen({navigation}) {
         name="home"
         component={()=><Home navigation={navigation} />}
       />
-      <Tab.Screen name="homePa" component={Home} />
+      <Tab.Screen name="homePa" component={AddMember} />
     </Tab.Navigator>
   );
 }
