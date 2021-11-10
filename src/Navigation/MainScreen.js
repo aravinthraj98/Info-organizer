@@ -10,7 +10,7 @@ import AddMember from '../Components/AddMembers';
 
 const Stack = createNativeStackNavigator();
 function MainScreen() {
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>

@@ -5,6 +5,7 @@ import Home from '../Screens/Home';
 import {Primary, Secondary} from '../Utils/Colors';
 import {Icon} from 'react-native-elements/dist/icons/Icon';
 import AddMember from '../Components/AddMembers';
+import AddProject from '../Components/AddProject';
 
 const Tab = createMaterialBottomTabNavigator();
 function ManagerScreen({navigation}) {
@@ -22,7 +23,7 @@ function ManagerScreen({navigation}) {
         name="home"
         component={AddMember}
       />
-      <Tab.Screen name="homePa" component={AddMember} />
+      <Tab.Screen name="homePa" component={AddProject} />
     </Tab.Navigator>
   );
 }
