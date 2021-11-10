@@ -74,5 +74,15 @@ async function addNewEmployee(data) {
     return 'some error occured please try again later';
   }
 }
+async  function addNewProject(data){
 
-export {addNewCompany, addNewEmployee};
+  try{
+    await db.collection("projects").add(data);
+    return true;
+  }
+  catch(error){
+    return "some error occured ,try later"
+  }
+}
+
+export {addNewCompany, addNewEmployee,addNewProject};

@@ -3,8 +3,16 @@ import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {Card, Input, Icon, Button} from 'react-native-elements';
 import {Primary, Secondary} from '../Utils/Colors';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {addNewProject} from '../Services/CrudFirestore';
 
 function AddProject() {
+  const initialState = {
+    companyName: 'Company A',
+    projectName: '',
+    projectDescription: '',
+    projectDeadline: '',
+  };
+  const [projectDetail, setProjectDetail] = useState(initialState);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -14,8 +22,25 @@ function AddProject() {
     setDatePickerVisibility(false);
   };
   const handleConfirm = date => {
-    console.log('A date has been picked: ', new Date(String(date)).getDate());
+    setProjectDetail({
+      ...projectDetail,
+      projectDeadline: String(date),
+    });
+    console.log('A date has been picked: ', String(date));
     hideDatePicker();
+  };
+  const handleChange = (name, value) => {
+    setProjectDetail({...projectDetail, [name]: value});
+  };
+  const handleSubmit = async () => {
+    console.log(projectDetail);
+    let isAdded = await addNewProject(projectDetail);
+    if (isAdded === true) {
+      alert('Project added successfully');
+      setProjectDetail({...initialState});
+    } else {
+      alert(isAdded);
+    }
   };
   return (
     <View style={{flex: 1, justifyContent: 'center'}}>
@@ -29,18 +54,22 @@ function AddProject() {
               fontWeight: 'bold',
               textAlign: 'center',
             }}>
-            Add Member
+            Add Project
           </Text>
           <Input
             style={{backgroundColor: Secondary, color: Primary}}
             placeholder={'project name'}
-            // onChangeText={text => handleChange('companyEmail', text)}
+            value={projectDetail.projectName}
+            onChangeText={text => handleChange('projectName', text)}
             leftIcon={<Icon name="add" size={24} color={Secondary} />}
           />
           <Input
             style={{backgroundColor: Secondary, color: Primary}}
-            placeholder={'project descriptiton'}
-            // onChangeText={text => handleChange('companyEmail', text)}
+            multiline={true}
+            numberOfLines={3}
+            placeholder={'project description'}
+            value={projectDetail.projectDescription}
+            onChangeText={text => handleChange('projectDescription', text)}
             leftIcon={<Icon name="add" size={24} color={Secondary} />}
           />
           <Button
@@ -62,7 +91,7 @@ function AddProject() {
           /> */}
 
           <TouchableOpacity
-            // onPress={handleSubmit}
+            onPress={handleSubmit}
             style={{
               backgroundColor: Primary,
               width: '50%',
