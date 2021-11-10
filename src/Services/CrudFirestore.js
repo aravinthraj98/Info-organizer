@@ -2,6 +2,7 @@ import React from 'react';
 // import {firebase, db} from '../Database/firebase';
 import {firebase} from '@react-native-firebase/firestore';
 import firestore from '@react-native-firebase/firestore';
+import {encrypt} from './CryptoEncryptDecrypt';
 firebase.app();
 const db = firestore();
 async function addNewLogin(companyEmail, password, role) {
@@ -47,4 +48,31 @@ async function addNewCompany(
   }
 }
 
-export {addNewCompany};
+async function addNewEmployee(data) {
+  try {
+    const isData = await db
+      .collection('employee')
+      .where('email', '==', data.email)
+      .get()
+      .then(querySnapShot => querySnapShot);
+    if (isData.size == 0) {
+      console.log('alert here');
+      let password = encrypt(data.password);
+      console.log(password + 'password');
+      await db.collection('employee').add({
+        email: data.email,
+        password: password,
+        companyName: '',
+        teams: [],
+      });
+      return true;
+    } else {
+      return 'Email registered already';
+    }
+  } catch (error) {
+    console.log(error);
+    return 'some error occured please try again later';
+  }
+}
+
+export {addNewCompany, addNewEmployee};
