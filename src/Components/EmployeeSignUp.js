@@ -16,9 +16,15 @@ function EmployeeSignUp() {
     setEmployeeDetails({...employeeDetails, [name]: value});
   }
   async function handleSubmit() {
-    console.log('submitted');
+    if(employeeDetails.password!==employeeDetails.confirmPassword){
+      alert("password and confirm password must be same");
+      return;
+    }
     const isEmployee = await addNewEmployee(employeeDetails);
-    if (isEmployee === true) alert('registration successfull');
+    if (isEmployee === true){
+       alert('registration successfull');
+       setEmployeeDetails({...initialState});
+    } 
     else alert(isEmployee);
   }
 
