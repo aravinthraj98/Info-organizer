@@ -74,11 +74,17 @@ async function addNewEmployee(data) {
     return 'some error occured please try again later';
   }
 }
-async function addNewProject(data) {
+async function addNewProject(data, type = null) {
+  if (type == null) {
+    type = 'projects';
+  }
   try {
-    await db.collection('projects').add(data);
+    console.log('AKKKKKKKKKKKKKKKKKKK');
+    await db.collection(type).add(data);
+
     return true;
   } catch (error) {
+    console.log('firebase error');
     return 'some error occured ,try later';
   }
 }

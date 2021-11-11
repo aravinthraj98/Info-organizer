@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text} from 'react-native';
+import {FAB} from 'react-native-elements';
 import {Primary, Secondary} from '../Utils/Colors';
 function InformationPanel() {
   const data = [
