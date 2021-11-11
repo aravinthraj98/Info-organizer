@@ -74,15 +74,29 @@ async function addNewEmployee(data) {
     return 'some error occured please try again later';
   }
 }
-async  function addNewProject(data){
-
-  try{
-    await db.collection("projects").add(data);
+async function addNewProject(data) {
+  try {
+    await db.collection('projects').add(data);
     return true;
-  }
-  catch(error){
-    return "some error occured ,try later"
+  } catch (error) {
+    return 'some error occured ,try later';
   }
 }
-
-export {addNewCompany, addNewEmployee,addNewProject};
+async function getAllProjects(companyName) {
+  try {
+    const data = await db
+      .collection('projects')
+      .where('companyName', '==', companyName)
+      .get();
+    let temp = [];
+    data.docs.forEach(snapShot => {
+      temp.push(snapShot.data());
+    });
+    console.log(temp);
+    return temp;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
+export {addNewCompany, addNewEmployee, addNewProject, getAllProjects};

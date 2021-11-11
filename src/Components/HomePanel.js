@@ -1,21 +1,46 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {Primary, Secondary} from '../Utils/Colors';
 import {Avatar, Badge, FAB} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
-function HomePanel({InfoPanel,handleNavigate}) {
+import {getAllProjects} from '../Services/CrudFirestore';
+import CountDown from 'react-native-countdown-component';
+function HomePanel({InfoPanel, handleNavigate}) {
   const detail = [
     {projectName: 'hello', projectDeadLine: 'today', newInfo: true},
     {projectName: 'hello1', projectDeadLine: 'today', newInfo: false},
     {projectName: 'hello12', projectDeadLine: 'today', newInfo: true},
     {projectName: 'hello23', projectDeadLine: 'today', newInfo: false},
   ];
- 
+  const currentTime = Date.now();
+
+  const [projectDetail, setProjectDetail] = useState([]);
+  useEffect(() => {
+    async function getProjects() {
+      console.log('hello');
+      const projects = await getAllProjects('Company A');
+
+      // console.log();
+      // console.log('current' + currentTime);
+      if (projects !== null) {
+        setProjectDetail(projects);
+        console.log(projects[0].projectDeadline);
+        console.log(projects[0]);
+        // let diff = currentTime - Number(new Date(projects[0].projectDeadline));
+        // console.log('diff' + diff);
+        // console.log(
+        //   Number(new Date(projects[0].projectDeadline) - currentTime),
+        // );
+      }
+    }
+
+    getProjects();
+  }, []);
 
   return (
     <View style={{flex: 1, padding: 10}}>
       <ScrollView>
-        {detail.map((value, index) => (
+        {projectDetail.map((value, index) => (
           <TouchableOpacity
             onPress={() => InfoPanel(value.projectName)}
             key={index}
@@ -83,6 +108,12 @@ function HomePanel({InfoPanel,handleNavigate}) {
                   No of Employees: 5
                 </Text>
               </View>
+              <CountDown
+                timetoShow={('H', 'M', 'S')}
+                until={
+                  (Number(new Date(value.projectDeadline)) - currentTime) / 1000
+                }
+              />
             </View>
           </TouchableOpacity>
         ))}
@@ -97,4 +128,5 @@ function HomePanel({InfoPanel,handleNavigate}) {
     </View>
   );
 }
+
 export default HomePanel;
