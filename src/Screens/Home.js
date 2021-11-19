@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Text, View, ScrollView} from 'react-native';
 import Header from '../Components/Header';
 import HomePanel from '../Components/HomePanel';
 import {Primary, Secondary} from '../Utils/Colors';
+import {DetailContext} from '../Utils/DetailContext';
 
 function Home({navigation}) {
   const InfoPanel = name => {
@@ -11,8 +12,11 @@ function Home({navigation}) {
       name,
     });
   };
-  function handleNavigate(){
-     navigation.push("createLeadAndProject")
+  const [detail, setDetail] = useContext(DetailContext);
+  console.log('detiaaa are');
+  console.log({detail});
+  function handleNavigate() {
+    navigation.push('createLeadAndProject');
   }
   return (
     <View style={{flex: 1, backgroundColor: Secondary}}>

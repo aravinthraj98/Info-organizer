@@ -11,8 +11,9 @@ import {FAB} from 'react-native-elements/dist/buttons/FAB';
 import {checkLogin} from '../Services/CrudFirestore';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-function Login() {
+function Login({navigation, setLoggedIn}) {
   const [signUp, setSignUp] = useState(false);
+  console.log(navigation.getState());
   const initialState = {
     email: '',
     password: '',
@@ -32,10 +33,12 @@ function Login() {
     }
 
     let isLogin = await checkLogin(loginDetails);
-    if (isLogin === true) {
-      alert('logged In');
+    if (isLogin.authorize === true) {
+      // setLoggedIn(true);
+      setLoggedIn(isLogin.data);
+      navigation.navigate('home');
     } else {
-      alert(isLogin);
+      alert(isLogin.data);
     }
     setLoading(false);
   };

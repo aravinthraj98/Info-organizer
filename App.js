@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useContext, useState} from 'react';
 
 import {
   SafeAreaView,
@@ -30,9 +30,11 @@ import MainScreen from './src/Navigation/MainScreen';
 import Home from './src/Screens/Home';
 import Login from './src/Screens/Login';
 import {Primary} from './src/Utils/Colors';
+import {DetailContext} from './src/Utils/DetailContext';
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
+  const [detail, setDetail] = useState([]);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -42,7 +44,9 @@ const App = () => {
     //   <View style={{flex:1,backgroundColor:Primary}}>
     // <Text>Hello</Text>
     //   </View>
-    <MainScreen />
+    <DetailContext.Provider value={[detail, setDetail]}>
+      <MainScreen />
+    </DetailContext.Provider>
   );
 };
 

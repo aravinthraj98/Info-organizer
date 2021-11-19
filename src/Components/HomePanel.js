@@ -18,23 +18,23 @@ function HomePanel({InfoPanel, handleNavigate}) {
   useEffect(() => {
     async function getProjects() {
       console.log('hello');
-      const projects = await getAllProjects('Company A');
+      // const projects = await getAllProjects('Company A');
 
       // console.log();
       // console.log('current' + currentTime);
-      if (projects !== null) {
-        setProjectDetail(projects);
-        console.log(projects[0].projectDeadline);
-        console.log(projects[0]);
-        // let diff = currentTime - Number(new Date(projects[0].projectDeadline));
-        // console.log('diff' + diff);
-        // console.log(
-        //   Number(new Date(projects[0].projectDeadline) - currentTime),
-        // );
-      }
+      // if (projects !== null) {
+      //   setProjectDetail(projects);
+      //   console.log(projects[0].projectDeadline);
+      //   console.log(projects[0]);
+      // let diff = currentTime - Number(new Date(projects[0].projectDeadline));
+      // console.log('diff' + diff);
+      // console.log(
+      //   Number(new Date(projects[0].projectDeadline) - currentTime),
+      // );
+      //}
     }
 
-    getProjects();
+    // getProjects();
   }, []);
 
   return (

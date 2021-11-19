@@ -84,7 +84,7 @@ async function checkLogin(data) {
 
   if (isData.size <= 0) {
     console.log('email not found');
-    return 'email not found';
+    return {data: "email not found", authorize: false};
   }
   let isMatch = false;
 
@@ -92,16 +92,16 @@ async function checkLogin(data) {
     if (decrypt(snap.data().password, data.password) === true) {
       console.log('password match successull');
 
-      isMatch = true;
+      isMatch = snap.data();
     } else {
       isMatch = false;
     }
   });
-  if (isMatch === true) {
-    return true;
+  if (isMatch !==false) {
+    return {data:isMatch,authorize:true};
   }
 
-  return 'password is mismatched';
+  return {data:"password misMatched", authorize: false};
 }
 async function addNewProject(data, type = null) {
   if (type == null) {
