@@ -5,37 +5,41 @@ import firestore from '@react-native-firebase/firestore';
 import {encrypt} from './CryptoEncryptDecrypt';
 firebase.app();
 const db = firestore();
-async function addNewLogin(companyEmail, password, role) {
+async function addNewLogin(companyEmail, password, role, companyName, team) {
   try {
-    await db.collection('login').add({companyEmail, password, role});
+    await db
+      .collection('login')
+      .add({Email: companyEmail, password, role, companyName, team});
     return true;
   } catch (error) {
     return false;
   }
 }
 
-async function addNewCompany(
-  companyName,
-  companyEmail,
-  password,
-  companyDescription,
-) {
+async function addNewCompany(companyName, Email, password, companyDescription) {
   console.log('funcrion called');
   try {
     console.log('funcrion called 1');
     const data = await db
       .collection('company')
-      .where('companyEmail', '==', companyEmail)
+      .where('Email', '==', Email)
       .get()
       .then(querySnapShot => querySnapShot);
 
     if (data.size == 0) {
-      let isAdded = await addNewLogin(companyEmail, password, 'manager');
+      password = encrypt(password);
+      let isAdded = await addNewLogin(
+        Email,
+        password,
+        'manager',
+        companyName,
+        null,
+      );
       if (!isAdded) return 'Some error occurred';
 
       await db
         .collection('company')
-        .add({companyEmail, companyName, companyDescription});
+        .add({Email, companyName, companyDescription});
 
       return true;
     } else {
@@ -50,21 +54,18 @@ async function addNewCompany(
 
 async function addNewEmployee(data) {
   try {
+    data.email = data.email.trim;
     const isData = await db
-      .collection('employee')
-      .where('email', '==', data.email)
+      .collection('login')
+      .where('Email', '==', data.email)
       .get()
       .then(querySnapShot => querySnapShot);
     if (isData.size == 0) {
       console.log('alert here');
       let password = encrypt(data.password);
       console.log(password + 'password');
-      await db.collection('employee').add({
-        email: data.email,
-        password: password,
-        companyName: '',
-        teams: [],
-      });
+      let isAdded = await addNewLogin(data.email, password, '', '', '');
+      if (!isAdded) return 'some error occured';
       return true;
     } else {
       return 'Email registered already';
