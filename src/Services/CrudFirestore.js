@@ -2,7 +2,7 @@ import React from 'react';
 // import {firebase, db} from '../Database/firebase';
 import {firebase} from '@react-native-firebase/firestore';
 import firestore from '@react-native-firebase/firestore';
-import {encrypt} from './CryptoEncryptDecrypt';
+import {decrypt, encrypt} from './CryptoEncryptDecrypt';
 firebase.app();
 const db = firestore();
 async function addNewLogin(companyEmail, password, role, companyName, team) {
@@ -75,12 +75,40 @@ async function addNewEmployee(data) {
     return 'some error occured please try again later';
   }
 }
+async function checkLogin(data) {
+  const isData = await db
+    .collection('login')
+    .where('Email', '==', data.email)
+    .get()
+    .then(querySnapShot => querySnapShot);
+
+  if (isData.size <= 0) {
+    console.log('email not found');
+    return 'email not found';
+  }
+  let isMatch = false;
+
+  isData.forEach(snap => {
+    if (decrypt(snap.data().password, data.password) === true) {
+      console.log('password match successull');
+
+      isMatch = true;
+    } else {
+      isMatch = false;
+    }
+  });
+  if (isMatch === true) {
+    return true;
+  }
+
+  return 'password is mismatched';
+}
 async function addNewProject(data, type = null) {
   if (type == null) {
     type = 'projects';
   }
   try {
-    console.log('AKKKKKKKKKKKKKKKKKKK');
+    // console.log('AKKKKKKKKKKKKKKKKKKK');
     await db.collection(type).add(data);
 
     return true;
@@ -106,4 +134,10 @@ async function getAllProjects(companyName) {
     return null;
   }
 }
-export {addNewCompany, addNewEmployee, addNewProject, getAllProjects};
+export {
+  addNewCompany,
+  addNewEmployee,
+  addNewProject,
+  getAllProjects,
+  checkLogin,
+};

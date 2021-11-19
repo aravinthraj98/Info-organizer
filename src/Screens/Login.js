@@ -8,15 +8,44 @@ import {LinearTextGradient} from 'react-native-text-gradient';
 import {BottomSheet} from 'react-native-elements/dist/bottomSheet/BottomSheet';
 import SignUp from '../Components/SignUp';
 import {FAB} from 'react-native-elements/dist/buttons/FAB';
+import {checkLogin} from '../Services/CrudFirestore';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 function Login() {
   const [signUp, setSignUp] = useState(false);
+  const initialState = {
+    email: '',
+    password: '',
+  };
+  const [loginDetails, setLoginDetails] = useState(initialState);
+  const [loading, setLoading] = useState(false);
+  const handleSubmit = async () => {
+    setLoading(true);
+    if (
+      loginDetails.email.length < 0 ||
+      loginDetails.email.split('@').length <= 1 ||
+      loginDetails.password.length <= 6
+    ) {
+      alert('email or password not in valid format');
+      setLoading(false);
+      return;
+    }
+
+    let isLogin = await checkLogin(loginDetails);
+    if (isLogin === true) {
+      alert('logged In');
+    } else {
+      alert(isLogin);
+    }
+    setLoading(false);
+  };
   return (
     <LinearGradient
       colors={[Primary, Secondary]}
       style={{flex: 1, alignContent: 'center', justifyContent: 'center'}}
       start={{x: 0.49, y: 0}}
       end={{x: 0.5, y: 0}}>
+      <Spinner visible={loading} textContent={'Logging In'} />
       <View style={{flex: 9, alignContent: 'center', justifyContent: 'center'}}>
         <Card>
           <Text
@@ -32,17 +61,26 @@ function Login() {
           <Input
             placeholder="Email"
             errorStyle={{color: 'red'}}
-            errorMessage="ENTER A VALID ERROR HERE"
+            value={loginDetails.email}
+            // errorMessage="ENTER A VALID ERROR HERE"
+            onChangeText={text =>
+              setLoginDetails({...loginDetails, email: text})
+            }
             leftIcon={<Icon name="user" size={24} color={Primary} />}
           />
           <Input
             placeholder="Password"
             errorStyle={{color: 'red'}}
-            errorMessage="ENTER A VALID ERROR HERE"
+            // errorMessage="ENTER A VALID ERROR HERE"
+            value={loginDetails.password}
+            onChangeText={text =>
+              setLoginDetails({...loginDetails, password: text})
+            }
             secureTextEntry={true}
             leftIcon={<Icon name="lock" size={24} color={Secondary} />}
           />
           <TouchableOpacity
+            onPress={handleSubmit}
             style={{
               backgroundColor: Primary,
               width: '70%',
