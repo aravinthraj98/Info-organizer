@@ -15,8 +15,8 @@ function Home({navigation}) {
   const [detail, setDetail] = useContext(DetailContext);
   console.log('detiaaa are');
   console.log({detail});
-  function handleNavigate() {
-    navigation.push('createLeadAndProject');
+  function handleNavigate(name) {
+    navigation.push(name);
   }
   return (
     <View style={{flex: 1, backgroundColor: Secondary}}>

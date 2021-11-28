@@ -8,6 +8,7 @@ import InformationScreen from '../Screens/InformationScreen';
 import ManagerScreen from './ManagerScreen';
 import AddMember from '../Components/AddMembers';
 import {DetailContext} from '../Utils/DetailContext';
+import AddProject from '../Components/AddProject';
 
 const Stack = createNativeStackNavigator();
 function MainScreen() {
@@ -28,6 +29,7 @@ function MainScreen() {
         <Stack.Screen name="home" component={SubScreen} />
         <Stack.Screen name="Information" component={InformationScreen} />
         <Stack.Screen name="createLeadAndProject" component={ManagerScreen} />
+        <Stack.Screen name="addProject" component={AddProject} />
         <Stack.Screen name="createMember" component={AddMember} />
       </Stack.Navigator>
     </NavigationContainer>

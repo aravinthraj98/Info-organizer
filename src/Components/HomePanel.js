@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {ScrollView, Text, TouchableOpacity, View, Button} from 'react-native';
 import {Primary, Secondary} from '../Utils/Colors';
-import {Avatar, Badge, FAB} from 'react-native-elements';
+import {Avatar, Badge, FAB, SpeedDial} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {
   getAllInvite,
@@ -17,6 +17,7 @@ import {BottomSheet} from 'react-native-elements/dist/bottomSheet/BottomSheet';
 // import { Button } from 'react-native-elements/dist/buttons/Button';
 const db = firestore();
 function HomePanel({InfoPanel, handleNavigate}) {
+  const [open, setOpen] = useState(false);
   const detail = [
     {projectName: 'hello', projectDeadLine: 'today', newInfo: true},
     {projectName: 'hello1', projectDeadLine: 'today', newInfo: false},
@@ -221,7 +222,25 @@ function HomePanel({InfoPanel, handleNavigate}) {
           </View>
         ))}
       </BottomSheet>
-      {userDetail.role == 'manager' && (
+      <SpeedDial
+        isOpen={open}
+        buttonStyle={{backgroundColor: Secondary}}
+        icon={{name: 'create', color: '#fff'}}
+        openIcon={{name: 'close', color: '#fff'}}
+        onOpen={() => setOpen(!open)}
+        onClose={() => setOpen(!open)}>
+        <SpeedDial.Action
+          icon={{name: 'add', color: '#fff'}}
+          title="Add project"
+          onPress={() => handleNavigate('addProject')}
+        />
+        <SpeedDial.Action
+          icon={{name: 'people', color: '#fff'}}
+          title="invite lead"
+          onPress={() => console.log('Delete Something')}
+        />
+      </SpeedDial>
+      {/* {userDetail.role == 'manager' && (
         <FAB
           // onPress={() => setSignUp(true)}
           onPress={handleNavigate}
@@ -229,7 +248,7 @@ function HomePanel({InfoPanel, handleNavigate}) {
           color={Primary}
           title={<Icon size={20} color={Secondary} name="plus" />}
         />
-      )}
+      )} */}
     </View>
   );
 }
