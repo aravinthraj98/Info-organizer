@@ -54,7 +54,7 @@ async function addNewCompany(companyName, Email, password, companyDescription) {
 
 async function addNewEmployee(data) {
   try {
-    data.email = data.email.trim;
+    data.Email = data.Email.trim();
     const isData = await db
       .collection('login')
       .where('Email', '==', data.Email)
@@ -91,8 +91,10 @@ async function checkLogin(data) {
   isData.forEach(snap => {
     if (decrypt(snap.data().password, data.password) === true) {
       console.log('password match successull');
+      let tempData = snap.data();
+      tempData.id = snap.id;
 
-      isMatch = snap.data();
+      isMatch = tempData;
     } else {
       isMatch = false;
     }
@@ -155,11 +157,41 @@ async function getAllInvite(email) {
       .then(snap => snap);
     let data = [];
     invites.forEach(snap => {
-      data.push(snap.data());
+      let tempData = snap.data();
+      tempData.id = snap.id;
+      data.push(tempData);
     });
     return data;
   } catch (err) {
     console.log(err);
+    return 'error occured';
+  }
+}
+async function updateAllInvite(status, id, invites) {
+  try {
+    if (id != null) await db.collection('invites').doc(id).update({status});
+
+    if (status != 'accepted') return true;
+    for (i in invites) {
+      if (id != null && invites[i].id == id) continue;
+      await db
+        .collection('invites')
+        .doc(invites[i].id)
+        .update({status: 'pending'});
+    }
+    return true;
+  } catch (err) {
+    console.log(err);
+    return 'Some error occured';
+  }
+}
+async function updateCompany(id, companyName) {
+  try {
+    await db.collection('login').doc(id).update({companyName});
+    return true;
+  } catch (err) {
+    console.log(err);
+    return 'some error occured';
   }
 }
 export {
@@ -170,4 +202,6 @@ export {
   checkLogin,
   sendInvite,
   getAllInvite,
+  updateAllInvite,
+  updateCompany,
 };

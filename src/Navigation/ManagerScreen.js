@@ -20,7 +20,7 @@ function ManagerScreen({navigation}) {
       }}>
       <Tab.Screen
         options={{tabBarIcon: ({color}) => <Icon name="home" color={color} />}}
-        name="home"
+        name="home Sub"
         component={AddMember}
       />
       <Tab.Screen name="homePa" component={AddProject} />

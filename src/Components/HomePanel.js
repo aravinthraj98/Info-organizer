@@ -7,6 +7,8 @@ import {
   getAllInvite,
   getAllProjects,
   sendInvite,
+  updateAllInvite,
+  updateCompany,
 } from '../Services/CrudFirestore';
 import CountDown from 'react-native-countdown-component';
 import {DetailContext} from '../Utils/DetailContext';
@@ -53,6 +55,20 @@ function HomePanel({InfoPanel, handleNavigate}) {
     }
     getInvitation();
   }, []);
+  async function respondInvite(status, id, companyName = '') {
+    let data = await updateAllInvite(status, id, invites);
+
+    if (data == true && status === 'accepted') {
+      console.log(userDetail);
+      let isUpdate = await updateCompany(userDetail.id, companyName);
+      if (isUpdate == true) {
+        setInvites([]);
+        alert('Your invitation response sent successfully');
+      } else {
+        alert(isUpdate);
+      }
+    }
+  }
 
   return (
     <View style={{flex: 1, padding: 10}}>
@@ -141,7 +157,28 @@ function HomePanel({InfoPanel, handleNavigate}) {
           backgroundColor: 'whitesmoke',
           flexDirection: 'column',
         }}>
-        <Button title="mark as read" />
+        <View style={{flexDirection: 'row', padding: 2}}>
+          <View style={{flex: 2, height: 60, padding: 4}}>
+            <Button title="mark as read" />
+          </View>
+          <View
+            style={{
+              flex: 2,
+              padding: 4,
+              justifyContent: 'flex-end',
+              flexDirection: 'row',
+            }}>
+            <TouchableOpacity
+              onPress={() => setInvites([])}
+              style={{
+                height: 35,
+                width: '25%',
+              }}>
+              <Text style={{color: 'red'}}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
         <Text
           style={{
             color: Primary,
@@ -154,8 +191,8 @@ function HomePanel({InfoPanel, handleNavigate}) {
         </Text>
         {invites.map((value, index) => (
           <View
+            key={index}
             style={{
-              flex: 1,
               flexDirection: 'row',
               margin: 10,
               marginBottom: 70,
@@ -167,10 +204,18 @@ function HomePanel({InfoPanel, handleNavigate}) {
               </Text>
             </View>
             <View style={{flex: 1, padding: 3}}>
-              <Button color={'green'} title={'accept'} />
+              <Button
+                onPress={() => respondInvite('accepted', value.id, value.from)}
+                color={'green'}
+                title={'accept'}
+              />
             </View>
             <View style={{flex: 1, padding: 3}}>
-              <Button color={'red'} title={'reject'} />
+              <Button
+                onPress={() => respondInvite('rejected', value.id)}
+                color={'red'}
+                title={'reject'}
+              />
             </View>
           </View>
         ))}

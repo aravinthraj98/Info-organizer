@@ -19,10 +19,10 @@ function SubScreen({navigation}) {
       }}>
       <Tab.Screen
         options={{tabBarIcon: ({color}) => <Icon name="home" color={color} />}}
-        name="home"
-        component={()=><Home navigation={navigation} />}
-      />
-      <Tab.Screen name="homePa" component={AddMember} />
+        name="home3">
+        {() => <Home navigation={navigation} />}
+      </Tab.Screen>
+      <Tab.Screen name="home2" component={AddMember} />
     </Tab.Navigator>
   );
 }

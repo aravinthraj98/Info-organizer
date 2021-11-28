@@ -1,16 +1,20 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {Card, Input, Icon} from 'react-native-elements';
 import {sendInvite} from '../Services/CrudFirestore';
 
 import {Primary, Secondary} from '../Utils/Colors';
+import {DetailContext} from '../Utils/DetailContext';
 function AddMember() {
   const [email, setEmail] = useState('');
+  const [detail, setDetail] = useContext(DetailContext);
   async function inviteEmployee() {
     let data = {
+      id: Date.now(),
       email: email,
-      description: 'Invitation to join our firm',
+      description: `Invitation to join our firm`,
       status: null,
+      from: detail.companyName,
     };
     let isInvite = await sendInvite(data);
     if (isInvite === true) {
