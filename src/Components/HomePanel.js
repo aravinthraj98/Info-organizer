@@ -14,6 +14,7 @@ import CountDown from 'react-native-countdown-component';
 import {DetailContext} from '../Utils/DetailContext';
 import firestore from '@react-native-firebase/firestore';
 import {BottomSheet} from 'react-native-elements/dist/bottomSheet/BottomSheet';
+import {NavigationContainer} from '@react-navigation/native';
 // import { Button } from 'react-native-elements/dist/buttons/Button';
 const db = firestore();
 function HomePanel({InfoPanel, handleNavigate}) {
@@ -77,7 +78,7 @@ function HomePanel({InfoPanel, handleNavigate}) {
       <ScrollView>
         {projectDetail.map((value, index) => (
           <TouchableOpacity
-            onPress={() => InfoPanel(value.projectName)}
+            onPress={() => handleNavigate('taskScreen')}
             key={index}
             style={{
               flex: 1,
@@ -237,7 +238,7 @@ function HomePanel({InfoPanel, handleNavigate}) {
         <SpeedDial.Action
           icon={{name: 'people', color: '#fff'}}
           title="invite lead"
-          onPress={() => console.log('Delete Something')}
+          onPress={() => handleNavigate('addMember')}
         />
       </SpeedDial>
       {/* {userDetail.role == 'manager' && (

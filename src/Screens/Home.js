@@ -13,8 +13,8 @@ function Home({navigation}) {
     });
   };
   const [detail, setDetail] = useContext(DetailContext);
-  console.log('detiaaa are');
-  console.log({detail});
+  // console.log('detiaaa are');
+  // console.log({detail});
   function handleNavigate(name) {
     navigation.push(name);
   }

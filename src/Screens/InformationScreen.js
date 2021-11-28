@@ -19,14 +19,14 @@ function InformationScreen({route, navigation}) {
       <View style={{flex: 9}}>
         <InformationPanel />
       </View>
-      <FAB
+      {/* <FAB
         title="add Info"
         style={{padding: 10}}
         onPress={() => setIsVisible(true)}
       />
       <BottomSheet isVisible={isVisible} >
         <AddTask projectName={projectName} setIsVisible={setIsVisible} />
-      </BottomSheet>
+      </BottomSheet> */}
     </View>
   );
 }
