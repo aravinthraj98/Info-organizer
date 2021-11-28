@@ -3,7 +3,11 @@ import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {Card, Input, Icon, Button} from 'react-native-elements';
 import {Primary, Secondary} from '../Utils/Colors';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {addNewProject, getAllEmployee} from '../Services/CrudFirestore';
+import {
+  addNewProject,
+  getAllEmployee,
+  UpdateProjectLead,
+} from '../Services/CrudFirestore';
 import {DetailContext} from '../Utils/DetailContext';
 import {Dropdown} from 'react-native-element-dropdown';
 
@@ -67,7 +71,15 @@ function AddProject() {
     newDetail.companyName = companyDetail.companyName;
     let isAdded = await addNewProject(newDetail);
     if (isAdded === true) {
-      alert('Project added successfully');
+      let isUpdateLead = await UpdateProjectLead(
+        projectDetail.projectName,
+        projectDetail.teamLead,
+      );
+      if (isUpdateLead == true) {
+        alert('Project added successfully');
+        getEmployee();
+      } else alert(isUpdateLead);
+
       setProjectDetail({...initialState});
     } else {
       alert(isAdded);

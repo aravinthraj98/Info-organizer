@@ -9,7 +9,8 @@ async function addNewLogin(companyEmail, password, role, companyName, project) {
   try {
     await db
       .collection('login')
-      .add({Email: companyEmail, password, role, companyName, project});
+      .doc(companyEmail)
+      .set({Email: companyEmail, password, role, companyName, project});
     return true;
   } catch (error) {
     return false;
@@ -20,11 +21,20 @@ async function addNewCompany(companyName, Email, password, companyDescription) {
   console.log('funcrion called');
   try {
     console.log('funcrion called 1');
-    const data = await db
+    let data = await db
       .collection('company')
       .where('Email', '==', Email)
       .get()
       .then(querySnapShot => querySnapShot);
+    if (data.size == 0) {
+      data = await db
+        .collection('company')
+        .where('companyName', '==', companyName)
+        .get()
+        .then(querySnapShot => querySnapShot);
+    } else {
+      return 'company already registered';
+    }
 
     if (data.size == 0) {
       password = encrypt(password);
@@ -43,7 +53,7 @@ async function addNewCompany(companyName, Email, password, companyDescription) {
 
       return true;
     } else {
-      return 'Company email already registered';
+      return 'Company name already registered';
     }
   } catch (error) {
     console.log('funcrion called 2');
@@ -119,12 +129,25 @@ async function addNewProject(data, type = null) {
     return 'some error occured ,try later';
   }
 }
-async function getAllProjects(companyName) {
+async function getAllProjects(userDetail) {
   try {
-    const data = await db
-      .collection('projects')
-      .where('companyName', '==', companyName)
-      .get();
+    const project = db.collection('projects');
+
+    console.log({userDetail});
+    let projectDetail = project.where(
+      'companyName',
+      '==',
+      userDetail.companyName,
+    );
+    if (userDetail.role !== 'manager') {
+      console.log('heree inside');
+      projectDetail = projectDetail.where(
+        'projectName',
+        '==',
+        userDetail.project,
+      );
+    }
+    data = await projectDetail.get().then(snap => snap);
     let temp = [];
     data.docs.forEach(snapShot => {
       temp.push(snapShot.data());
@@ -215,6 +238,19 @@ async function getAllEmployee(companyName) {
     return null;
   }
 }
+
+async function UpdateProjectLead(project, teamLead) {
+  try {
+    await db
+      .collection('login')
+      .doc(teamLead)
+      .update({role: 'teamLead', project});
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
 export {
   addNewCompany,
   addNewEmployee,
@@ -226,4 +262,5 @@ export {
   updateAllInvite,
   updateCompany,
   getAllEmployee,
+  UpdateProjectLead,
 };

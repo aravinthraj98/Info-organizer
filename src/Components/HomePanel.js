@@ -31,9 +31,9 @@ function HomePanel({InfoPanel, handleNavigate}) {
   useEffect(() => {
     async function getProjects() {
       console.log('hello');
-      const projects = await getAllProjects(userDetail.companyName);
+      const projects = await getAllProjects(userDetail);
 
-      console.log();
+      console.log('here');
       console.log('current' + currentTime);
       if (projects !== null) {
         setProjectDetail(projects);

@@ -15,7 +15,7 @@ function Login({navigation, setLoggedIn}) {
   const [signUp, setSignUp] = useState(false);
   console.log(navigation.getState());
   const initialState = {
-    email: 'abcd@gmail.com',
+    email: 'aravinth1@gmail.com',
     password: '12345678',
   };
   const [loginDetails, setLoginDetails] = useState(initialState);
