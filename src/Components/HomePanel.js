@@ -1,10 +1,19 @@
-import React, {useEffect, useState} from 'react';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {ScrollView, Text, TouchableOpacity, View, Button} from 'react-native';
 import {Primary, Secondary} from '../Utils/Colors';
 import {Avatar, Badge, FAB} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {getAllProjects} from '../Services/CrudFirestore';
+import {
+  getAllInvite,
+  getAllProjects,
+  sendInvite,
+} from '../Services/CrudFirestore';
 import CountDown from 'react-native-countdown-component';
+import {DetailContext} from '../Utils/DetailContext';
+import firestore from '@react-native-firebase/firestore';
+import {BottomSheet} from 'react-native-elements/dist/bottomSheet/BottomSheet';
+// import { Button } from 'react-native-elements/dist/buttons/Button';
+const db = firestore();
 function HomePanel({InfoPanel, handleNavigate}) {
   const detail = [
     {projectName: 'hello', projectDeadLine: 'today', newInfo: true},
@@ -15,6 +24,8 @@ function HomePanel({InfoPanel, handleNavigate}) {
   const currentTime = Date.now();
 
   const [projectDetail, setProjectDetail] = useState([]);
+  const [userDetail, setUserDetail] = useContext(DetailContext);
+  const [invites, setInvites] = useState([]);
   useEffect(() => {
     async function getProjects() {
       console.log('hello');
@@ -35,6 +46,12 @@ function HomePanel({InfoPanel, handleNavigate}) {
     }
 
     // getProjects();
+    async function getInvitation() {
+      let data = await getAllInvite(userDetail.Email);
+      setInvites(data);
+      console.log(data);
+    }
+    getInvitation();
   }, []);
 
   return (
@@ -118,13 +135,55 @@ function HomePanel({InfoPanel, handleNavigate}) {
           </TouchableOpacity>
         ))}
       </ScrollView>
-      <FAB
-        // onPress={() => setSignUp(true)}
-        onPress={handleNavigate}
-        style={{justifyContent: 'flex-end'}}
-        color={Primary}
-        title={<Icon size={20} color={Secondary} name="plus" />}
-      />
+      <BottomSheet
+        isVisible={invites.length > 0}
+        containerStyle={{
+          backgroundColor: 'whitesmoke',
+          flexDirection: 'column',
+        }}>
+        <Button title="mark as read" />
+        <Text
+          style={{
+            color: Primary,
+            backgroundColor: Secondary,
+            padding: 1,
+            margin: 2,
+          }}>
+          Note:Acceptance will lead to leave your current roles and
+          responsibilities
+        </Text>
+        {invites.map((value, index) => (
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              margin: 10,
+              marginBottom: 70,
+            }}>
+            <View style={{flex: 2}}>
+              <Text style={{color: 'black'}}>
+                {value.description}
+                {'\n'}
+              </Text>
+            </View>
+            <View style={{flex: 1, padding: 3}}>
+              <Button color={'green'} title={'accept'} />
+            </View>
+            <View style={{flex: 1, padding: 3}}>
+              <Button color={'red'} title={'reject'} />
+            </View>
+          </View>
+        ))}
+      </BottomSheet>
+      {userDetail.role == 'manager' && (
+        <FAB
+          // onPress={() => setSignUp(true)}
+          onPress={handleNavigate}
+          style={{justifyContent: 'flex-end'}}
+          color={Primary}
+          title={<Icon size={20} color={Secondary} name="plus" />}
+        />
+      )}
     </View>
   );
 }

@@ -5,11 +5,11 @@ import firestore from '@react-native-firebase/firestore';
 import {decrypt, encrypt} from './CryptoEncryptDecrypt';
 firebase.app();
 const db = firestore();
-async function addNewLogin(companyEmail, password, role, companyName, team) {
+async function addNewLogin(companyEmail, password, role, companyName, project) {
   try {
     await db
       .collection('login')
-      .add({Email: companyEmail, password, role, companyName, team});
+      .add({Email: companyEmail, password, role, companyName, project});
     return true;
   } catch (error) {
     return false;
@@ -57,14 +57,14 @@ async function addNewEmployee(data) {
     data.email = data.email.trim;
     const isData = await db
       .collection('login')
-      .where('Email', '==', data.email)
+      .where('Email', '==', data.Email)
       .get()
       .then(querySnapShot => querySnapShot);
     if (isData.size == 0) {
       console.log('alert here');
       let password = encrypt(data.password);
       console.log(password + 'password');
-      let isAdded = await addNewLogin(data.email, password, '', '', '');
+      let isAdded = await addNewLogin(data.Email, password, '', '', '');
       if (!isAdded) return 'some error occured';
       return true;
     } else {
@@ -84,7 +84,7 @@ async function checkLogin(data) {
 
   if (isData.size <= 0) {
     console.log('email not found');
-    return {data: "email not found", authorize: false};
+    return {data: 'email not found', authorize: false};
   }
   let isMatch = false;
 
@@ -97,11 +97,11 @@ async function checkLogin(data) {
       isMatch = false;
     }
   });
-  if (isMatch !==false) {
-    return {data:isMatch,authorize:true};
+  if (isMatch !== false) {
+    return {data: isMatch, authorize: true};
   }
 
-  return {data:"password misMatched", authorize: false};
+  return {data: 'password misMatched', authorize: false};
 }
 async function addNewProject(data, type = null) {
   if (type == null) {
@@ -134,10 +134,40 @@ async function getAllProjects(companyName) {
     return null;
   }
 }
+
+async function sendInvite(data) {
+  try {
+    await db.collection('invites').add(data);
+    return true;
+  } catch (err) {
+    console.log(err);
+    return 'some error occured while sending info';
+  }
+}
+async function getAllInvite(email) {
+  try {
+    console.log('Invitations');
+    let invites = await db
+      .collection('invites')
+      .where('email', '==', email)
+      .where('status', '==', null)
+      .get()
+      .then(snap => snap);
+    let data = [];
+    invites.forEach(snap => {
+      data.push(snap.data());
+    });
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}
 export {
   addNewCompany,
   addNewEmployee,
   addNewProject,
   getAllProjects,
   checkLogin,
+  sendInvite,
+  getAllInvite,
 };

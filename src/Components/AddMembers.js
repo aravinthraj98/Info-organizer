@@ -1,9 +1,25 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {Card, Input, Icon} from 'react-native-elements';
+import {sendInvite} from '../Services/CrudFirestore';
 
 import {Primary, Secondary} from '../Utils/Colors';
 function AddMember() {
+  const [email, setEmail] = useState('');
+  async function inviteEmployee() {
+    let data = {
+      email: email,
+      description: 'Invitation to join our firm',
+      status: null,
+    };
+    let isInvite = await sendInvite(data);
+    if (isInvite === true) {
+      alert('invitation succesfull');
+      setEmail('');
+    } else {
+      alert(isInvite);
+    }
+  }
   return (
     <View style={{flex: 1, justifyContent: 'center'}}>
       <Card>
@@ -20,7 +36,8 @@ function AddMember() {
           </Text>
           <Input
             style={{backgroundColor: Secondary, color: Primary}}
-            // onChangeText={text => handleChange('companyEmail', text)}
+            value={email}
+            onChangeText={text => setEmail(text)}
             leftIcon={<Icon name="add" size={24} color={Secondary} />}
           />
           {/* <Input
@@ -30,7 +47,7 @@ function AddMember() {
           /> */}
 
           <TouchableOpacity
-            // onPress={handleSubmit}
+            onPress={inviteEmployee}
             style={{
               backgroundColor: Primary,
               width: '50%',
@@ -45,7 +62,7 @@ function AddMember() {
                 fontWeight: 'bold',
                 fontSize: 20,
               }}>
-              ADD
+              Invite to company
             </Text>
           </TouchableOpacity>
         </View>

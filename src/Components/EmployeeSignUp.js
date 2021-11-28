@@ -8,7 +8,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 function EmployeeSignUp() {
   const initialState = {
-    email: '',
+    Email: '',
     password: '',
     confirmPassword: '',
     role: '',
@@ -26,8 +26,8 @@ function EmployeeSignUp() {
       return;
     }
     if (
-      employeeDetails.email == '' ||
-      employeeDetails.email.split('@').length <= 1
+      employeeDetails.Email == '' ||
+      employeeDetails.Email.split('@').length <= 1
     ) {
       alert('Not a valid email');
       return;
@@ -44,8 +44,8 @@ function EmployeeSignUp() {
       <Spinner visible={loading} textContent={'signing up'} />
       <Input
         placeholder="Email"
-        value={employeeDetails.email}
-        onChangeText={text => handleChange('email', text)}
+        value={employeeDetails.Email}
+        onChangeText={text => handleChange('Email', text)}
         errorStyle={{color: 'red'}}
         // errorMessage="ENTER A VALID ERROR HERE"
         leftIcon={<Icon name="user" size={24} color={Primary} />}
