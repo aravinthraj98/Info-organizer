@@ -164,7 +164,7 @@ async function getAllInvite(email) {
     return data;
   } catch (err) {
     console.log(err);
-    return 'error occured';
+    return null;
   }
 }
 async function updateAllInvite(status, id, invites) {
@@ -194,6 +194,27 @@ async function updateCompany(id, companyName) {
     return 'some error occured';
   }
 }
+async function getAllEmployee(companyName) {
+  try {
+    console.log({companyName});
+    let data = await db
+      .collection('login')
+      .where('role', '==', '')
+      .where('companyName', '==', companyName)
+      .get()
+      .then(snap => snap);
+    let newData = [];
+    data.forEach(snap => {
+      let tempData = snap.data();
+      tempData.id = snap.id;
+      newData.push(tempData);
+    });
+    return newData;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
 export {
   addNewCompany,
   addNewEmployee,
@@ -204,4 +225,5 @@ export {
   getAllInvite,
   updateAllInvite,
   updateCompany,
+  getAllEmployee,
 };

@@ -1,10 +1,11 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {Card, Input, Icon, Button} from 'react-native-elements';
 import {Primary, Secondary} from '../Utils/Colors';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {addNewProject} from '../Services/CrudFirestore';
+import {addNewProject, getAllEmployee} from '../Services/CrudFirestore';
 import {DetailContext} from '../Utils/DetailContext';
+import {Dropdown} from 'react-native-element-dropdown';
 
 function AddProject() {
   const initialState = {
@@ -12,10 +13,15 @@ function AddProject() {
     projectName: '',
     projectDescription: '',
     projectDeadline: '',
+    teamLead: '',
   };
+  useEffect(() => {
+    getEmployee();
+  }, []);
   const [companyDetail, setCompanyDetail] = useContext(DetailContext);
   const [projectDetail, setProjectDetail] = useState(initialState);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [dropDownValues, setDropDownValues] = useState([]);
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -34,10 +40,31 @@ function AddProject() {
   const handleChange = (name, value) => {
     setProjectDetail({...projectDetail, [name]: value});
   };
+  const getEmployee = async () => {
+    let data = await getAllEmployee(companyDetail.companyName);
+    if (data == null) {
+      alert('some error occured');
+      return;
+    }
+    if (data.length == 0) {
+      alert('no employee here please add employee and come back');
+      return;
+    }
+    let dropData = [];
+    for (let i in data) {
+      let tempData = {
+        label: data[i].Email,
+        value: data[i].Email,
+      };
+      dropData.push(tempData);
+    }
+    setDropDownValues(dropData);
+    console.log({dropData});
+  };
   const handleSubmit = async () => {
     console.log(projectDetail);
     let newDetail = {...projectDetail};
-    newDetail.companyName = companyDetail.Email;
+    newDetail.companyName = companyDetail.companyName;
     let isAdded = await addNewProject(newDetail);
     if (isAdded === true) {
       alert('Project added successfully');
@@ -76,6 +103,7 @@ function AddProject() {
             onChangeText={text => handleChange('projectDescription', text)}
             leftIcon={<Icon name="add" size={24} color={Primary} />}
           />
+
           <Button
             title="Add dead Line to the project"
             onPress={showDatePicker}
@@ -103,6 +131,24 @@ function AddProject() {
             onChangeText={text => handleChange('companyEmail', text)}
             leftIcon={<Icon name="password" size={24} color={Primary} />}
           /> */}
+          <Dropdown
+            data={dropDownValues}
+            placeholder="choose lead"
+            style={{color: 'black', margin: 1}}
+            labelField="label"
+            valueField="value"
+            containerStyle={{color: Secondary, backgroundColor: Secondary}}
+            // search
+
+            // searchPlaceholder="search.."
+
+            maxHeight={150}
+            // dropdownPosition={'auto'}
+            value={projectDetail.teamLead}
+            onChange={item =>
+              setProjectDetail({...projectDetail, teamLead: item.value})
+            }
+          />
 
           <TouchableOpacity
             onPress={handleSubmit}
