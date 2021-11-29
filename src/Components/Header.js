@@ -2,13 +2,15 @@ import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {Primary, Secondary} from '../Utils/Colors';
+import Icon from 'react-native-vector-icons/FontAwesome';
 function Header({title, navigation}) {
   return (
     <View
       style={{
-        flex: 1,
         backgroundColor: Secondary,
         flexDirection: 'row',
+        paddingTop: 3,
+        marginTop: 4,
       }}>
       <TouchableOpacity
         onPress={() => navigation.goBack()}
@@ -17,18 +19,20 @@ function Header({title, navigation}) {
           width: '10%',
         }}>
         <Text
-          style={{color: 'white', fontSize: 30, marginTop: 10, marginLeft: 10}}>
-          {'<'}
+          style={{color: 'white', fontSize: 30, marginTop: 20, marginLeft: 10}}>
+          <Icon name="chevron-left" color={Primary} size={20} />
         </Text>
       </TouchableOpacity>
       <Text
         style={{
           width: '80%',
           textAlign: 'center',
-          fontSize: 40,
+          fontSize: 20,
+          marginTop: 20,
+          padding: 4,
           color: Primary,
         }}>
-        {title}
+        project: {title}
       </Text>
     </View>
   );

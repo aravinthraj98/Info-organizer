@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, TouchableOpacity, View, Text} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {Primary, Secondary} from '../Utils/Colors';
@@ -10,14 +10,22 @@ import SignUp from '../Components/SignUp';
 import {FAB} from 'react-native-elements/dist/buttons/FAB';
 import {checkLogin} from '../Services/CrudFirestore';
 import Spinner from 'react-native-loading-spinner-overlay';
+import {DetailContext} from '../Utils/DetailContext';
 
-function Login({navigation, setLoggedIn}) {
+function Login({navigation, route, setLoggedIn}) {
   const [signUp, setSignUp] = useState(false);
+  const logout = route.params?.logout;
+  const [detail, setDetail] = useContext(DetailContext);
   console.log(navigation.getState());
   const initialState = {
     email: 'aravinth1@gmail.com',
     password: '12345678',
   };
+  useEffect(() => {
+    if (logout === true) {
+      setDetail(null);
+    }
+  }, []);
   const [loginDetails, setLoginDetails] = useState(initialState);
   const [loading, setLoading] = useState(false);
   const handleSubmit = async () => {

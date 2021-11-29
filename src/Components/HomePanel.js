@@ -9,6 +9,7 @@ import {
   sendInvite,
   updateAllInvite,
   updateCompany,
+  db,
 } from '../Services/CrudFirestore';
 import CountDown from 'react-native-countdown-component';
 import {DetailContext} from '../Utils/DetailContext';
@@ -16,7 +17,7 @@ import firestore from '@react-native-firebase/firestore';
 import {BottomSheet} from 'react-native-elements/dist/bottomSheet/BottomSheet';
 import {NavigationContainer} from '@react-navigation/native';
 // import { Button } from 'react-native-elements/dist/buttons/Button';
-const db = firestore();
+// const db = firestore();
 function HomePanel({InfoPanel, handleNavigate}) {
   const [open, setOpen] = useState(false);
   const detail = [
@@ -56,8 +57,28 @@ function HomePanel({InfoPanel, handleNavigate}) {
       setInvites(data);
       console.log(data);
     }
-    getProjects();
+    // getProjects();
+    let unsubscribe = db
+      .collection('projects')
+      .where('companyName', '==', userDetail.companyName);
+    if (userDetail.role == 'teamLead') {
+      unsubscribe = unsubscribe.where('teamLead', '==', userDetail.Email);
+    }
+    unsubscribe = unsubscribe.onSnapshot(snap => {
+      let project = [];
+      snap.docChanges().forEach(change => {
+        if (change.type == 'added') {
+          let tempData = change.doc.data();
+          tempData.id = change.doc.id;
+          project.push(tempData);
+        }
+      });
+      setProjectDetail(project);
+    });
     getInvitation();
+    return () => {
+      unsubscribe();
+    };
   }, []);
   async function respondInvite(status, id, companyName = '') {
     let data = await updateAllInvite(status, id, invites);
