@@ -6,14 +6,9 @@ import {Primary, Secondary} from '../Utils/Colors';
 import {DetailContext} from '../Utils/DetailContext';
 import {TabView, Tab, Header, ListItem} from 'react-native-elements';
 import {Icon} from 'react-native-elements/dist/icons/Icon';
+import InfoPanel from '../Components/InfoPanel';
 
 function Home({navigation}) {
-  const InfoPanel = name => {
-    console.log('name' + name);
-    navigation.push('Information', {
-      name,
-    });
-  };
   const [index, setIndex] = useState(0);
   const [detail, setDetail] = useContext(DetailContext);
   // console.log('detiaaa are');
@@ -66,14 +61,11 @@ function Home({navigation}) {
       <TabView value={index} onChange={setIndex}>
         <TabView.Item style={{backgroundColor: 'red', width: '100%'}}>
           <View style={{flex: 10, backgroundColor: 'whitesmoke'}}>
-            <HomePanel InfoPanel={InfoPanel} handleNavigate={handleNavigate} />
+            <HomePanel handleNavigate={handleNavigate} />
           </View>
         </TabView.Item>
-        <TabView.Item style={{backgroundColor: 'blue', width: '100%'}}>
-          <Text h1>Favorite</Text>
-        </TabView.Item>
-        <TabView.Item style={{backgroundColor: 'green', width: '100%'}}>
-          <Text h1>Cart</Text>
+        <TabView.Item style={{backgroundColor: 'white', width: '100%'}}>
+          <InfoPanel type="General" />
         </TabView.Item>
       </TabView>
 

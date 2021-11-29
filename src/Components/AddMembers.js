@@ -61,7 +61,12 @@ function AddMember({navigation, route}) {
     console.log({dropData});
   };
   const addEmployee = async () => {
-    let data = await addEmployeeToproject(email, role, detail.project);
+    let data = await addEmployeeToproject(
+      email,
+      role,
+      detail.project,
+      detail.companyName,
+    );
     if (data === true) {
       alert('data added successfully');
       setEmail('');

@@ -20,18 +20,31 @@ async function updateAllInvite(status, id, invites) {
 async function updateCompany(id, companyName) {
   try {
     await db.collection('login').doc(id).update({companyName});
+    await db.collection('information').add({
+      companyName,
+      type: 'General',
+      time: Date.now(),
+      description: `New employee ${id} joined to our company`,
+    });
     return true;
   } catch (err) {
     console.log(err);
     return 'some error occured';
   }
 }
-async function UpdateProjectLead(project, teamLead) {
+async function UpdateProjectLead(companyName, project, teamLead) {
   try {
     await db
       .collection('login')
       .doc(teamLead)
       .update({role: 'teamLead', project});
+    await db.collection('information').add({
+      companyName,
+      type: 'General',
+      time: Date.now(),
+      description: `Employee ${teamLead} assigned as teamLead for project ${project} `,
+    });
+
     return true;
   } catch (err) {
     console.log(err);

@@ -72,6 +72,7 @@ function AddProject() {
     let isAdded = await addNewProject(newDetail);
     if (isAdded === true) {
       let isUpdateLead = await UpdateProjectLead(
+        companyDetail.companyName,
         projectDetail.projectName,
         projectDetail.teamLead,
       );

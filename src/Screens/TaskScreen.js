@@ -18,6 +18,7 @@ import {BottomSheet} from 'react-native-elements/dist/bottomSheet/BottomSheet';
 import {Tab, TabView} from 'react-native-elements';
 import TaskPanel from '../Components/TaskPanel';
 import Header from '../Components/Header';
+import InfoPanel from '../Components/InfoPanel';
 
 function TaskScreen({navigation}) {
   const [taskDetail, setTaskDetail] = useState([]);
@@ -50,8 +51,8 @@ function TaskScreen({navigation}) {
         <TabView.Item style={{backgroundColor: 'white', width: '100%'}}>
           <TaskPanel navigation={navigation} />
         </TabView.Item>
-        <TabView.Item style={{backgroundColor: 'blue', width: '100%'}}>
-          <Text h1>Favorite</Text>
+        <TabView.Item style={{backgroundColor: 'white', width: '100%'}}>
+          <InfoPanel type={detail.project} />
         </TabView.Item>
       </TabView>
     </View>

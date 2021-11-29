@@ -4,6 +4,7 @@ import {Primary, Secondary} from '../Utils/Colors';
 import {Avatar, Badge, FAB, SpeedDial} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {
+  db,
   getAllInvite,
   getAllProjects,
   getTaskDetails,
@@ -18,19 +19,43 @@ function TaskPanel({navigation}) {
   const [taskDetail, setTaskDetail] = useState([]);
   const [open, setOpen] = useState(false);
   const [detail, setDetail] = useContext(DetailContext);
-  const currentTime = Date.now();
+  const [currentTime, setCurrentTime] = useState(Date.now());
   useEffect(() => {
-    async function getAllTask() {
-      let data = await getTaskDetails(detail);
-      if (data === null) {
-        alert('some error occured');
-        return;
-      } else {
-        console.log(data);
-        setTaskDetail(data);
-      }
+    // async function getAllTask() {
+
+    //   let data = await getTaskDetails(detail);
+    //   if (data === null) {
+    //     alert('some error occured');
+    //     return;
+    //   } else {
+    //     console.log(data);
+    //     setTaskDetail(data);
+    //   }
+    // }
+    // getAllTask();
+    setCurrentTime(Date.now());
+    setTaskDetail([]);
+    var unsubscribe = db
+      .collection('projecttasks')
+      .where('companyName', '==', detail.companyName)
+      .where('projectName', '==', detail.project);
+    if (detail.role === 'teamMember') {
+      unsubscribe = unsubscribe.where('assignedTo', '==', detail.Email);
     }
-    getAllTask();
+    unsubscribe = unsubscribe.onSnapshot(snap => {
+      let newData = [];
+
+      snap.docChanges().forEach(change => {
+        if (change.type === 'added') {
+          let tempData = change.doc.data();
+          tempData.id = change.doc.id;
+          newData.push(tempData);
+        }
+      });
+
+      setTaskDetail([...newData, ...taskDetail]);
+    });
+    return () => unsubscribe();
   }, []);
   return (
     <View style={{flex: 1}}>
@@ -41,7 +66,8 @@ function TaskPanel({navigation}) {
             key={index}
             style={{
               flex: 1,
-              backgroundColor: Secondary,
+              backgroundColor:
+                value.assignedTo === detail.Email ? 'lightgreen' : 'white',
               padding: 10,
               margin: 5,
               marginVertical: 10,
@@ -79,8 +105,10 @@ function TaskPanel({navigation}) {
                   flexDirection: 'row',
                   padding: 5,
                 }}>
-                <Text style={{color: 'white'}}>project Name</Text>
-                <Text style={{color: Primary}}>{value.taskName}</Text>
+                <Text style={{color: Secondary}}>taskName</Text>
+                <Text style={{color: Secondary, fontWeight: 'bold'}}>
+                  {value.taskName}
+                </Text>
               </View>
               <View
                 style={{
@@ -88,8 +116,10 @@ function TaskPanel({navigation}) {
                   justifyContent: 'space-evenly',
                   flexDirection: 'row',
                 }}>
-                <Text style={{color: 'white'}}>project Name</Text>
-                <Text style={{color: Primary}}>{value.taskName}</Text>
+                <Text style={{color: Secondary}}>taskTo</Text>
+                <Text style={{color: Secondary, fontWeight: 'bold'}}>
+                  {value.assignedTo}
+                </Text>
               </View>
               <View
                 style={{
@@ -101,6 +131,8 @@ function TaskPanel({navigation}) {
                 }}></View>
               <CountDown
                 timetoShow={('H', 'M', 'S')}
+                // running
+                // digitStyle={{backgroundColor: 'lightblue'}}
                 until={
                   (Number(new Date(value.taskDeadline)) - currentTime) / 1000
                 }

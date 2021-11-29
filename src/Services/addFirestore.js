@@ -88,6 +88,24 @@ async function addNewProject(data, type = null) {
   }
   try {
     // console.log('AKKKKKKKKKKKKKKKKKKK');
+    let infoData = {
+      companyName: data.companyName,
+      time: Date.now(),
+      description: '',
+      type: type === 'projects' ? 'General' : data.projectName,
+    };
+    if (type === 'projects') {
+      infoData.description =
+        'A new project started named as' + data.projectName;
+    } else {
+      infoData.description =
+        'A new task created as' +
+        data.taskName +
+        ' and assigned to ' +
+        data.assignedTo;
+    }
+
+    await db.collection('information').add(infoData);
     await db.collection(type).add(data);
 
     return true;
@@ -96,9 +114,15 @@ async function addNewProject(data, type = null) {
     return 'some error occured ,try later';
   }
 }
-async function addEmployeeToproject(email, role, project) {
+async function addEmployeeToproject(email, role, project, companyName) {
   try {
     await db.collection('login').doc(email).update({role, project});
+    await db.collection('information').add({
+      companyName,
+      description: `Employee ${email} joined ${project} as ${role}`,
+      type: project,
+      time: Date.now(),
+    });
     return true;
   } catch (err) {
     console.log(err);
