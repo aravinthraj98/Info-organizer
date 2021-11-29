@@ -232,13 +232,15 @@ function HomePanel({InfoPanel, handleNavigate}) {
         onOpen={() => setOpen(!open)}
         onClose={() => setOpen(!open)}>
         <SpeedDial.Action
-          icon={{name: 'add', color: '#fff'}}
-          title="Add project"
+          buttonStyle={{backgroundColor: Primary}}
+          icon={{name: 'add', color: Secondary}}
+          title="Add Project"
           onPress={() => handleNavigate('addProject')}
         />
         <SpeedDial.Action
-          icon={{name: 'people', color: '#fff'}}
-          title="invite lead"
+          buttonStyle={{backgroundColor: Primary}}
+          icon={{name: 'people', color: Secondary}}
+          title="Invite Employee"
           onPress={() => handleNavigate('addMember')}
         />
       </SpeedDial>
