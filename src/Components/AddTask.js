@@ -113,7 +113,7 @@ function AddTask({navigation}) {
           </Text>
           <Input
             style={{backgroundColor: Secondary, color: Primary}}
-            placeholder={'project name'}
+            placeholder={'task name'}
             value={taskDetail.taskName}
             onChangeText={text => handleChange('taskName', text)}
             leftIcon={<Icon name="plus" size={24} color={Secondary} />}
@@ -122,7 +122,7 @@ function AddTask({navigation}) {
             style={{backgroundColor: Secondary, color: Primary}}
             multiline={true}
             numberOfLines={3}
-            placeholder={'project description'}
+            placeholder={'task description'}
             value={taskDetail.taskDescription}
             onChangeText={text => handleChange('taskDescription', text)}
             leftIcon={<Icon name="info-circle" size={24} color={Secondary} />}
@@ -139,21 +139,35 @@ function AddTask({navigation}) {
             onConfirm={handleConfirm}
             onCancel={hideDatePicker}
           />
-          <Text>{taskDetail.taskDeadline}</Text>
+          <Text
+            style={{
+              width: '80%',
+              padding: 2,
+              backgroundColor: Secondary,
+              color: Primary,
+              margin: 5,
+            }}>
+            Deadline:
+            {taskDetail.taskDeadline}
+          </Text>
 
           <Dropdown
             data={dropDownValues}
             placeholder="choose lead"
             style={{color: 'black', margin: 1}}
+            search
             labelField="label"
             valueField="value"
-            containerStyle={{color: Secondary, backgroundColor: Secondary}}
+            containerStyle={{color: Secondary, backgroundColor: 'white'}}
             // search
 
             // searchPlaceholder="search.."
 
-            maxHeight={150}
+            maxHeight={170}
             // dropdownPosition={'auto'}
+            placeholderStyle={{color: Primary}}
+            searchPlaceholder={'search'}
+            selectedTextStyle={{color: 'black'}}
             value={taskDetail.assignedTo}
             onChange={item =>
               setTaskDetail({...taskDetail, assignedTo: item.value})
