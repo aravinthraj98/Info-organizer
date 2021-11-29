@@ -10,6 +10,7 @@ import AddMember from '../Components/AddMembers';
 import {DetailContext} from '../Utils/DetailContext';
 import AddProject from '../Components/AddProject';
 import TaskScreen from '../Screens/TaskScreen';
+import AddTask from '../Components/AddTask';
 
 const Stack = createNativeStackNavigator();
 function MainScreen() {
@@ -29,6 +30,7 @@ function MainScreen() {
         )}
         <Stack.Screen name="home" component={SubScreen} />
         <Stack.Screen name="taskScreen" component={TaskScreen} />
+        <Stack.Screen name="addTask" component={AddTask} />
         <Stack.Screen name="addMember" component={AddMember} />
         <Stack.Screen name="Information" component={InformationScreen} />
         <Stack.Screen name="createLeadAndProject" component={ManagerScreen} />

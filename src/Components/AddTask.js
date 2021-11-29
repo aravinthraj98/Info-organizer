@@ -1,21 +1,55 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {Card, Input, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Primary, Secondary} from '../Utils/Colors';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {addNewProject} from '../Services/CrudFirestore';
+import {addNewProject, getProjectEmployee} from '../Services/CrudFirestore';
+import {DetailContext} from '../Utils/DetailContext';
+import {NavigationContainer} from '@react-navigation/native';
+import {Dropdown} from 'react-native-element-dropdown';
 
-function AddTask({projectName, setIsVisible}) {
+function AddTask({navigation}) {
   const initialState = {
-    companyName: 'Company A',
+    companyName: '',
     projectName: '',
     taskName: '',
     taskDescription: '',
     taskDeadline: '',
+    assignedTo: '',
   };
   const [taskDetail, setTaskDetail] = useState(initialState);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [detail, setDetail] = useContext(DetailContext);
+  const [dropDownValues, setDropDownValues] = useState([]);
+
+  useEffect(() => {
+    getEmployee();
+  }, []);
+
+  const getEmployee = async () => {
+    let data = await getProjectEmployee(detail.project, detail.companyName);
+    if (data == null) {
+      alert('some error occured');
+      return;
+    }
+    if (data.length == 0) {
+      alert('no employee here please add employee and come back');
+      navigation.goBack();
+
+      return;
+    }
+    let dropData = [];
+    for (let i in data) {
+      let tempData = {
+        label: data[i].Email,
+        value: data[i].Email,
+      };
+      dropData.push(tempData);
+    }
+    setDropDownValues(dropData);
+    console.log({dropData});
+  };
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -36,12 +70,13 @@ function AddTask({projectName, setIsVisible}) {
   };
   const handleSubmit = async () => {
     let newDetail = {...taskDetail};
-    console.log({projectName});
-    newDetail.projectName = projectName;
+    // console.log({projectName});
+    newDetail.projectName = detail.project;
+    newDetail.companyName = detail.companyName;
     let isAdded = await addNewProject(newDetail, 'projecttasks');
     console.log('on the wy');
     if (isAdded === true) {
-      alert('Project added successfully');
+      alert('Task added successfully');
       setTaskDetail({...initialState});
     } else {
       alert(isAdded);
@@ -55,7 +90,10 @@ function AddTask({projectName, setIsVisible}) {
         <View>
           <Text style={{textAlign: 'right'}}>
             <Icon
-              onPress={() => setIsVisible(false)}
+              onPress={() => {
+                console.log('go back');
+                return navigation.goBack();
+              }}
               name="times"
               size={20}
               style={{color: 'red'}}
@@ -101,13 +139,31 @@ function AddTask({projectName, setIsVisible}) {
             onConfirm={handleConfirm}
             onCancel={hideDatePicker}
           />
+          <Text>{taskDetail.taskDeadline}</Text>
 
+          <Dropdown
+            data={dropDownValues}
+            placeholder="choose lead"
+            style={{color: 'black', margin: 1}}
+            labelField="label"
+            valueField="value"
+            containerStyle={{color: Secondary, backgroundColor: Secondary}}
+            // search
+
+            // searchPlaceholder="search.."
+
+            maxHeight={150}
+            // dropdownPosition={'auto'}
+            value={taskDetail.assignedTo}
+            onChange={item =>
+              setTaskDetail({...taskDetail, assignedTo: item.value})
+            }
+          />
           {/* <Input
             style={{backgroundColor: Secondary, color: Primary}}
             onChangeText={text => handleChange('companyEmail', text)}
             leftIcon={<Icon name="password" size={24} color={Primary} />}
           /> */}
-
           <TouchableOpacity
             onPress={handleSubmit}
             style={{

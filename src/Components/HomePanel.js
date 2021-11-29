@@ -37,6 +37,7 @@ function HomePanel({InfoPanel, handleNavigate}) {
 
       console.log('here');
       console.log('current' + currentTime);
+      console.log({projects});
       if (projects !== null) {
         setProjectDetail(projects);
         console.log(projects[0].projectDeadline);

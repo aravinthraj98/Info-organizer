@@ -1,7 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {Card, Input, Icon} from 'react-native-elements';
-import {getAllEmployee, sendInvite} from '../Services/CrudFirestore';
+import {
+  addEmployeeToproject,
+  addNewEmployee,
+  getAllEmployee,
+  sendInvite,
+} from '../Services/CrudFirestore';
 import {Dropdown} from 'react-native-element-dropdown';
 import {Primary, Secondary} from '../Utils/Colors';
 import {DetailContext} from '../Utils/DetailContext';
@@ -40,6 +45,8 @@ function AddMember({navigation, route}) {
     }
     if (data.length == 0) {
       alert('no employee here please add employee and come back');
+      navigation.goBack();
+
       return;
     }
     let dropData = [];
@@ -52,6 +59,16 @@ function AddMember({navigation, route}) {
     }
     setDropDownValues(dropData);
     console.log({dropData});
+  };
+  const addEmployee = async () => {
+    let data = await addEmployeeToproject(email, role, detail.project);
+    if (data === true) {
+      alert('data added successfully');
+      setEmail('');
+      getEmployee();
+    } else {
+      alert(data);
+    }
   };
   return (
     <View style={{flex: 1, justifyContent: 'center'}}>
@@ -99,7 +116,7 @@ function AddMember({navigation, route}) {
           /> */}
 
           <TouchableOpacity
-            onPress={inviteEmployee}
+            onPress={role !== 'teamMember' ? inviteEmployee : addEmployee}
             style={{
               backgroundColor: Primary,
               width: '50%',

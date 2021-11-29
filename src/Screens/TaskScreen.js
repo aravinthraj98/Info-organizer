@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {
   getAllInvite,
   getAllProjects,
+  getTaskDetails,
   sendInvite,
   updateAllInvite,
   updateCompany,
@@ -18,6 +19,21 @@ import {BottomSheet} from 'react-native-elements/dist/bottomSheet/BottomSheet';
 function TaskScreen({navigation}) {
   const [taskDetail, setTaskDetail] = useState([]);
   const [open, setOpen] = useState(false);
+  const [detail, setDetail] = useContext(DetailContext);
+  const currentTime = Date.now();
+  useEffect(() => {
+    async function getAllTask() {
+      let data = await getTaskDetails(detail);
+      if (data === null) {
+        alert('some error occured');
+        return;
+      } else {
+        console.log(data);
+        setTaskDetail(data);
+      }
+    }
+    getAllTask();
+  }, []);
   return (
     <View style={{flex: 1, padding: 10}}>
       <ScrollView>
@@ -104,12 +120,12 @@ function TaskScreen({navigation}) {
         onClose={() => setOpen(!open)}>
         <SpeedDial.Action
           icon={{name: 'add', color: '#fff'}}
-          title="Add project"
+          title="Add Task"
           onPress={() => navigation.push('addTask')}
         />
         <SpeedDial.Action
           icon={{name: 'people', color: '#fff'}}
-          title="invite lead"
+          title="Add Team Member"
           onPress={() => navigation.push('addMember', {role: 'teamMember'})}
         />
       </SpeedDial>

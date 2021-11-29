@@ -238,7 +238,44 @@ async function getAllEmployee(companyName) {
     return null;
   }
 }
+async function getProjectEmployee(project, companyName) {
+  try {
+    let data = await db
+      .collection('login')
+      .where('companyName', '==', companyName)
+      .where('project', '==', project)
+      .get()
+      .then(snap => snap);
+    let newData = [];
+    data.forEach(snap => {
+      newData.push(snap.data());
+    });
+    return newData;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
 
+async function getTaskDetails(detail) {
+  try {
+    let data = await db
+      .collection('projecttasks')
+      .where('assignedTo', '==', detail.Email)
+      .get()
+      .then(snap => snap);
+    let newData = [];
+    data.forEach(snap => {
+      let tempData = snap.data();
+      tempData.id = snap.id;
+      newData.push(tempData);
+    });
+    return newData;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
 async function UpdateProjectLead(project, teamLead) {
   try {
     await db
@@ -249,6 +286,15 @@ async function UpdateProjectLead(project, teamLead) {
   } catch (err) {
     console.log(err);
     return false;
+  }
+}
+async function addEmployeeToproject(email, role, project) {
+  try {
+    await db.collection('login').doc(email).update({role, project});
+    return true;
+  } catch (err) {
+    console.log(err);
+    return 'some error occured';
   }
 }
 export {
@@ -263,4 +309,7 @@ export {
   updateCompany,
   getAllEmployee,
   UpdateProjectLead,
+  addEmployeeToproject,
+  getProjectEmployee,
+  getTaskDetails,
 };
