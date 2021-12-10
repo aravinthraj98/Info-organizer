@@ -147,10 +147,12 @@ function AddProject() {
           <Dropdown
             data={dropDownValues}
             placeholder="choose lead"
-            style={{color: 'black', margin: 1}}
+            style={{color: 'white', margin: 1}}
             labelField="label"
             valueField="value"
             containerStyle={{color: Secondary, backgroundColor: Secondary}}
+            selectedTextStyle={{color: Primary}}
+            placeholderStyle={{color: 'white'}}
             // search
 
             // searchPlaceholder="search.."

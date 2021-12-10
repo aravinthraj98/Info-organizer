@@ -24,6 +24,7 @@ function InfoPanel({type}) {
           newData.push(tempData);
         }
       });
+      newData = newData.sort((a, b) => b.time - a.time);
 
       setInfoList([...newData, ...infoList]);
     });
