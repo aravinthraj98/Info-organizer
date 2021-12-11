@@ -111,6 +111,24 @@ function TaskPanel({navigation}) {
           </View>
         </View>
       ))}
+      <SpeedDial
+        isOpen={open}
+        buttonStyle={{backgroundColor: Secondary}}
+        icon={{name: 'create', color: '#fff'}}
+        openIcon={{name: 'close', color: '#fff'}}
+        onOpen={() => setOpen(!open)}
+        onClose={() => setOpen(!open)}>
+        <SpeedDial.Action
+          icon={{name: 'add', color: '#fff'}}
+          title="Add Task"
+          onPress={() => navigation.push('addTask')}
+        />
+        <SpeedDial.Action
+          icon={{name: 'people', color: '#fff'}}
+          title="Add Team Member"
+          onPress={() => navigation.push('addMember', {role: 'teamMember'})}
+        />
+      </SpeedDial>
     </View>
   );
   return (
