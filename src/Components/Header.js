@@ -1,4 +1,3 @@
-import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {Primary, Secondary} from '../Utils/Colors';
@@ -13,7 +12,7 @@ function Header({title, navigation}) {
         marginTop: 4,
       }}>
       <TouchableOpacity
-        onPress={() => navigation.goBack()}
+        onPress={() => navigation.push('home')}
         style={{
           color: 'white',
           width: '10%',

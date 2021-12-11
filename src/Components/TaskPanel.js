@@ -46,24 +46,73 @@ function TaskPanel({navigation}) {
     unsubscribe = unsubscribe.onSnapshot(snap => {
       let newData = [];
 
-      snap.docChanges().forEach(change => {
-        if (change.type === 'added') {
-          let tempData = change.doc.data();
-          tempData.id = change.doc.id;
-          newData.push(tempData);
-        }
+      snap.forEach(change => {
+        let tempData = change.data();
+        tempData.id = change.id;
+        newData.push(tempData);
       });
       console.log('here it came');
-      setTaskDetail([...newData, ...taskDetail]);
-      console.log(newData);
+      // setTaskDetail([...newData, ...taskDetail]);
+      setTaskDetail(newData);
+      console.log([...newData, ...taskDetail]);
     });
     return () => unsubscribe();
   }, []);
-  // return (
-  //   <View>
-  //     <Text>Hekkki</Text>
-  //   </View>
-  // );
+  return (
+    <View style={{flex: 1, padding: 5}}>
+      {taskDetail.map((value, index) => (
+        <View
+          style={{
+            minHeight: 110,
+            padding: 5,
+            margin: 5,
+            backgroundColor: 'whitesmoke',
+            borderRadius: 10,
+          }}>
+          <View style={{flex: 3}}>
+            <View
+              style={{
+                // alignContent: 'space-between',
+                // justifyContent: 'space-evenly',
+                flexDirection: 'row',
+              }}>
+              <Text style={{color: Secondary}}>taskName:</Text>
+              <Text style={{color: Secondary, fontWeight: 'bold'}}>
+                {value.taskName}
+              </Text>
+            </View>
+            <View
+              style={{
+                // alignContent: 'space-between',
+                // justifyContent: 'space-evenly',
+                flexDirection: 'row',
+              }}>
+              <Text style={{color: Secondary}}>taskTo: </Text>
+              <Text style={{color: Secondary, fontWeight: 'bold'}}>
+                {value.assignedTo}
+              </Text>
+            </View>
+            <View
+              style={{
+                backgroundColor: Secondary,
+                marginTop: 5,
+                borderTopLeftRadius: 10,
+                borderTopRightRadius: 10,
+                marginHorizontal: 5,
+              }}></View>
+            <CountDown
+              timetoShow={('H', 'M', 'S')}
+              // running
+              // digitStyle={{backgroundColor: 'lightblue'}}
+              until={
+                (Number(new Date(value.taskDeadline)) - currentTime) / 1000
+              }
+            />
+          </View>
+        </View>
+      ))}
+    </View>
+  );
   return (
     <View style={{flex: 1}}>
       <Text>task</Text>
