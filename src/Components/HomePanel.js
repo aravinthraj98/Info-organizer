@@ -58,28 +58,37 @@ function HomePanel({InfoPanel, handleNavigate}) {
       console.log(data);
     }
     // getProjects();
-    let unsubscribe = db
-      .collection('projects')
-      .where('companyName', '==', userDetail.companyName);
-    if (userDetail.role == 'teamLead') {
-      unsubscribe = unsubscribe.where('teamLead', '==', userDetail.Email);
-    }
-    unsubscribe = unsubscribe.onSnapshot(snap => {
-      let project = [];
-      snap.docChanges().forEach(change => {
-        if (change.type == 'added') {
-          let tempData = change.doc.data();
-          tempData.id = change.doc.id;
-          project.push(tempData);
-        }
+    if (userDetail.companyName != '') {
+      let unsubscribe = db
+        .collection('projects')
+        .where('companyName', '==', userDetail.companyName);
+      if (userDetail.role == 'teamLead') {
+        unsubscribe = unsubscribe.where('teamLead', '==', userDetail.Email);
+      } else if (userDetail.role === 'teamMember') {
+        unsubscribe = unsubscribe.where(
+          'projectName',
+          '==',
+          userDetail.project,
+        );
+      }
+
+      unsubscribe = unsubscribe.onSnapshot(snap => {
+        let project = [];
+        snap.docChanges().forEach(change => {
+          if (change.type == 'added') {
+            let tempData = change.doc.data();
+            tempData.id = change.doc.id;
+            project.push(tempData);
+          }
+        });
+        setProjectDetail(project);
       });
-      setProjectDetail(project);
-    });
-    getInvitation();
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+      getInvitation();
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [userDetail]);
   async function respondInvite(status, id, companyName = '') {
     let data = await updateAllInvite(status, id, invites);
 
@@ -89,6 +98,7 @@ function HomePanel({InfoPanel, handleNavigate}) {
       if (isUpdate == true) {
         setInvites([]);
         alert('Your invitation response sent successfully');
+        setUserDetail({...userDetail, companyName});
       } else {
         alert(isUpdate);
       }
