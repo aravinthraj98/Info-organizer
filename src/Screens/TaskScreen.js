@@ -27,17 +27,19 @@ function TaskScreen({navigation}) {
   const currentTime = Date.now();
   const [index, setIndex] = useState(0);
   useEffect(() => {
-    async function getAllTask() {
-      let data = await getTaskDetails(detail);
-      if (data === null) {
-        alert('some error occured');
-        return;
-      } else {
-        console.log(data);
-        setTaskDetail(data);
-      }
-    }
-    getAllTask();
+    console.log({detail});
+    // async function getAllTask() {
+
+    //   let data = await getTaskDetails(detail);
+    //   if (data === null) {
+    //     console.log('herre');
+    //     alert('some error occured');
+    //   } else {
+    //     console.log(data);
+    //     setTaskDetail(data);
+    //   }
+    // }
+    // getAllTask();
   }, []);
   return (
     <View style={{flex: 1, paddingTop: 10, backgroundColor: Secondary}}>

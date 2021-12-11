@@ -32,25 +32,6 @@ function HomePanel({InfoPanel, handleNavigate}) {
   const [userDetail, setUserDetail] = useContext(DetailContext);
   const [invites, setInvites] = useState([]);
   useEffect(() => {
-    async function getProjects() {
-      console.log('hello');
-      const projects = await getAllProjects(userDetail);
-
-      console.log('here');
-      console.log('current' + currentTime);
-      console.log({projects});
-      if (projects !== null) {
-        setProjectDetail(projects);
-        console.log(projects[0].projectDeadline);
-        console.log(projects[0]);
-        let diff = currentTime - Number(new Date(projects[0].projectDeadline));
-        console.log('diff' + diff);
-        console.log(
-          Number(new Date(projects[0].projectDeadline) - currentTime),
-        );
-      }
-    }
-
     // getProjects();
     async function getInvitation() {
       let data = await getAllInvite(userDetail.Email);
@@ -75,21 +56,20 @@ function HomePanel({InfoPanel, handleNavigate}) {
 
       unsubscribe = unsubscribe.onSnapshot(snap => {
         let project = [];
-        snap.docChanges().forEach(change => {
-          if (change.type == 'added') {
-            let tempData = change.doc.data();
-            tempData.id = change.doc.id;
-            project.push(tempData);
-          }
+
+        snap.forEach(change => {
+          let tempData = change.data();
+          tempData.id = change.id;
+          project.push(tempData);
         });
-        setProjectDetail(project);
+        setProjectDetail([...project]);
       });
 
       return () => {
         unsubscribe();
       };
     }
-  }, [userDetail]);
+  }, []);
   async function respondInvite(status, id, companyName = '') {
     let data = await updateAllInvite(status, id, invites);
 
@@ -98,8 +78,10 @@ function HomePanel({InfoPanel, handleNavigate}) {
       let isUpdate = await updateCompany(userDetail.id, companyName);
       if (isUpdate == true) {
         setInvites([]);
-        alert('Your invitation response sent successfully');
-        setUserDetail({...userDetail, companyName});
+        alert(
+          'Your invitation response sent successfully,you will be logged out soon for new changes',
+        );
+        handleNavigate('login');
       } else {
         alert(isUpdate);
       }
@@ -133,7 +115,7 @@ function HomePanel({InfoPanel, handleNavigate}) {
                 activeOpacity={1}
               />
 
-              {value.newInfo && (
+              {/* {value.newInfo && (
                 <Badge
                   status="warning"
                   // badgeStyle={{width: 12, height: 12}}
@@ -143,7 +125,7 @@ function HomePanel({InfoPanel, handleNavigate}) {
                     right: 25,
                   }}
                 />
-              )}
+              )} */}
             </View>
             <View style={{flex: 3}}>
               <View
@@ -290,3 +272,20 @@ function HomePanel({InfoPanel, handleNavigate}) {
 }
 
 export default HomePanel;
+
+//  async function getProjects() {
+//    console.log('hello');
+//    const projects = await getAllProjects(userDetail);
+
+//    console.log('here');
+//    console.log('current' + currentTime);
+//    console.log({projects});
+//    if (projects !== null) {
+//      setProjectDetail(projects);
+//      console.log(projects[0].projectDeadline);
+//      console.log(projects[0]);
+//      let diff = currentTime - Number(new Date(projects[0].projectDeadline));
+//      console.log('diff' + diff);
+//      console.log(Number(new Date(projects[0].projectDeadline) - currentTime));
+//    }
+//  }

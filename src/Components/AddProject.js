@@ -51,7 +51,10 @@ function AddProject() {
       return;
     }
     if (data.length == 0) {
-      alert('no employee here please add employee and come back');
+      alert(
+        'no more employee here to create new, please add employee and come back',
+      );
+      setDropDownValues([]);
       return;
     }
     let dropData = [];
@@ -78,7 +81,8 @@ function AddProject() {
       );
       if (isUpdateLead == true) {
         alert('Project added successfully');
-        getEmployee();
+
+        await getEmployee();
       } else alert(isUpdateLead);
 
       setProjectDetail({...initialState});

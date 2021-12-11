@@ -33,8 +33,9 @@ function TaskPanel({navigation}) {
     //   }
     // }
     // getAllTask();
+    console.log('hello panel screen');
     setCurrentTime(Date.now());
-    setTaskDetail([]);
+    // setTaskDetail([]);
     var unsubscribe = db
       .collection('projecttasks')
       .where('companyName', '==', detail.companyName)
@@ -52,17 +53,23 @@ function TaskPanel({navigation}) {
           newData.push(tempData);
         }
       });
-
+      console.log('here it came');
       setTaskDetail([...newData, ...taskDetail]);
+      console.log(newData);
     });
     return () => unsubscribe();
   }, []);
+  // return (
+  //   <View>
+  //     <Text>Hekkki</Text>
+  //   </View>
+  // );
   return (
     <View style={{flex: 1}}>
+      <Text>task</Text>
       <ScrollView>
         {taskDetail.map((value, index) => (
           <TouchableOpacity
-            onPress={() => InfoPanel(value.projectName)}
             key={index}
             style={{
               flex: 1,

@@ -11,6 +11,7 @@ import {DetailContext} from '../Utils/DetailContext';
 import AddProject from '../Components/AddProject';
 import TaskScreen from '../Screens/TaskScreen';
 import AddTask from '../Components/AddTask';
+import Home from '../Screens/Home';
 
 const Stack = createNativeStackNavigator();
 function MainScreen() {
@@ -28,7 +29,7 @@ function MainScreen() {
             {props => <Login {...props} setLoggedIn={setDetail} />}
           </Stack.Screen>
         )}
-        <Stack.Screen name="home" component={SubScreen} />
+        <Stack.Screen name="home" component={Home} />
         <Stack.Screen name="taskScreen" component={TaskScreen} />
         <Stack.Screen name="addTask" component={AddTask} />
         <Stack.Screen name="addMember" component={AddMember} />
