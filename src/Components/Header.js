@@ -17,6 +17,7 @@ function Header({title, navigation}) {
         style={{
           color: 'white',
           width: '10%',
+          marginTop: 10,
         }}>
         <Text
           style={{color: 'white', fontSize: 30, marginTop: 20, marginLeft: 10}}>
@@ -32,7 +33,7 @@ function Header({title, navigation}) {
           padding: 4,
           color: Primary,
         }}>
-        project: {title}
+        {title}
       </Text>
     </View>
   );

@@ -54,8 +54,8 @@ function Home({navigation}) {
       />
 
       <Tab value={index} onChange={setIndex}>
-        <Tab.Item title="recent" />
-        <Tab.Item title="favorite" />
+        <Tab.Item title="Projects" />
+        <Tab.Item title="information" />
         {/* <Tab.Item title="cart" /> */}
       </Tab>
       <TabView value={index} onChange={setIndex}>

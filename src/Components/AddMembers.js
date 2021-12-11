@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
-import {Card, Input, Icon} from 'react-native-elements';
+import {Card, Input} from 'react-native-elements';
 import {
   addEmployeeToproject,
   addNewEmployee,
@@ -10,6 +10,8 @@ import {
 import {Dropdown} from 'react-native-element-dropdown';
 import {Primary, Secondary} from '../Utils/Colors';
 import {DetailContext} from '../Utils/DetailContext';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Header from './Header';
 function AddMember({navigation, route}) {
   const [email, setEmail] = useState('');
   const [detail, setDetail] = useContext(DetailContext);
@@ -57,6 +59,7 @@ function AddMember({navigation, route}) {
       };
       dropData.push(tempData);
     }
+
     setDropDownValues(dropData);
     console.log({dropData});
   };
@@ -76,72 +79,76 @@ function AddMember({navigation, route}) {
     }
   };
   return (
-    <View style={{flex: 1, justifyContent: 'center'}}>
-      <Card>
-        <View style={{padding: 10}}>
-          <Text
-            style={{
-              color: Secondary,
-              fontSize: 25,
-              padding: 10,
-              fontWeight: 'bold',
-              textAlign: 'center',
-            }}>
-            Add Member
-          </Text>
-          {role === 'teamMember' ? (
-            <Dropdown
-              data={dropDownValues}
-              placeholder="choose lead"
-              style={{color: 'black', margin: 1}}
-              labelField="label"
-              valueField="value"
-              containerStyle={{color: Secondary, backgroundColor: Secondary}}
-              // search
+    <>
+      <Header title={'Invite people'} navigation={navigation} />
+      <View
+        style={{flex: 1, justifyContent: 'center', backgroundColor: Secondary}}>
+        <Card>
+          <View style={{padding: 10}}>
+            <Text
+              style={{
+                color: Secondary,
+                fontSize: 25,
+                padding: 10,
+                fontWeight: 'bold',
+                textAlign: 'center',
+              }}>
+              Add Member
+            </Text>
+            {role === 'teamMember' ? (
+              <Dropdown
+                data={dropDownValues}
+                placeholder="choose lead"
+                style={{color: 'white', margin: 1}}
+                labelField="label"
+                valueField="value"
+                containerStyle={{color: Secondary, backgroundColor: 'white'}}
+                // search
 
-              // searchPlaceholder="search.."
+                // searchPlaceholder="search.."
 
-              maxHeight={150}
-              // dropdownPosition={'auto'}
-              value={email}
-              onChange={item => setEmail(item.value)}
-            />
-          ) : (
-            <Input
-              style={{backgroundColor: Secondary, color: Primary}}
-              value={email}
-              onChangeText={text => setEmail(text)}
-              leftIcon={<Icon name="add" size={24} color={Secondary} />}
-            />
-          )}
-          {/* <Input
+                maxHeight={150}
+                // dropdownPosition={'auto'}
+                value={email}
+                onChange={item => setEmail(item.value)}
+              />
+            ) : (
+              <Input
+                style={{backgroundColor: Secondary, color: Primary}}
+                value={email}
+                onChangeText={text => setEmail(text)}
+                leftIcon={<Icon name="user-plus" size={24} color={Secondary} />}
+              />
+            )}
+            {/* <Input
             style={{backgroundColor: Secondary, color: Primary}}
             onChangeText={text => handleChange('companyEmail', text)}
             leftIcon={<Icon name="password" size={24} color={Primary} />}
           /> */}
 
-          <TouchableOpacity
-            onPress={role !== 'teamMember' ? inviteEmployee : addEmployee}
-            style={{
-              backgroundColor: Primary,
-              width: '50%',
-              marginLeft: '25%',
-              borderRadius: 20,
-              height: 30,
-            }}>
-            <Text
+            <TouchableOpacity
+              onPress={role !== 'teamMember' ? inviteEmployee : addEmployee}
               style={{
-                color: Secondary,
-                textAlign: 'center',
-                fontWeight: 'bold',
-                fontSize: 20,
+                backgroundColor: Primary,
+                width: '60%',
+                marginLeft: '25%',
+                borderRadius: 20,
+                height: 30,
               }}>
-              Invite to company
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </Card>
-    </View>
+              <Text
+                style={{
+                  color: Secondary,
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                  fontSize: 20,
+                }}>
+                Invite to company
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Card>
+      </View>
+    </>
   );
 }
 export default AddMember;

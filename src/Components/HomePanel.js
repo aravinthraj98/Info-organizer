@@ -58,6 +58,7 @@ function HomePanel({InfoPanel, handleNavigate}) {
       console.log(data);
     }
     // getProjects();
+    getInvitation();
     if (userDetail.companyName != '') {
       let unsubscribe = db
         .collection('projects')
@@ -83,7 +84,7 @@ function HomePanel({InfoPanel, handleNavigate}) {
         });
         setProjectDetail(project);
       });
-      getInvitation();
+
       return () => {
         unsubscribe();
       };
